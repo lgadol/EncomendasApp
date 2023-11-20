@@ -6,11 +6,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 public class EncomendasApp extends JFrame {
     private JButton clientesButton;
     private JButton pedidosButton;
@@ -21,40 +16,30 @@ public class EncomendasApp extends JFrame {
     private Clientes clientes;
     private Pedidos pedidos;
     private MeusPedidos meusPedidos;
+    private GridBagConstraints gbc;
 
-    final int adminFinal = admin;
-    final String nomeUsuarioLogadoFinal = nomeUsuarioLogado;
-
-    public EncomendasApp(int idUsuarioLogado) {
-        try {
-            Connection conn = DataBaseConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT admin, nome FROM clientes WHERE id = ?");
-            stmt.setInt(1, idUsuarioLogado);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                admin = rs.getInt("admin");
-                nomeUsuarioLogado = rs.getString("nome");
-            }
-
-            rs.close();
-            stmt.close();
-            conn.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        
+    public EncomendasApp(int admin, String nomeUsuarioLogado) {
         this.admin = admin;
+        this.nomeUsuarioLogado = nomeUsuarioLogado;
+
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        addButtons();
+        pack();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(500, 400);
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    private void addButtons() {
         Dimension buttonSize = new Dimension(200, 50); // Define o tamanho preferido para os botões
 
         if (admin == 1) {
             clientesButton = new JButton("Clientes");
             pedidosButton = new JButton("Pedidos");
-
             clientesButton.setPreferredSize(buttonSize);
             pedidosButton.setPreferredSize(buttonSize);
 
@@ -152,6 +137,7 @@ public class EncomendasApp extends JFrame {
                 if (meusPedidos != null) {
                     meusPedidos.dispose();
                 }
+
                 // Abre a tela de login
                 dispose();
                 new Login().setVisible(true);
@@ -160,14 +146,5 @@ public class EncomendasApp extends JFrame {
 
         buttonPanel.add(logoffButton);
         add(buttonPanel, gbc);
-
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500, 400);
-        setLocationRelativeTo(null);
-        setVisible(true);
-    }
-
-    public void setAdmin(int admin) {
-        this.admin = admin;
     }
 }

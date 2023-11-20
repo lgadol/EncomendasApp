@@ -20,6 +20,7 @@ public class Login extends JFrame {
 
         emailField = new JTextField();
         passwordField = new JPasswordField();
+
         loginButton = new JButton("Login");
         loginButton.setBackground(new Color(0, 204, 51));
         loginButton.setForeground(Color.BLACK);
@@ -32,14 +33,15 @@ public class Login extends JFrame {
         registerButton.setBackground(new Color(0, 153, 255));
         registerButton.setForeground(Color.BLACK);
         registerButton.setOpaque(true);
+
         ImageIcon icon =
             IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\cadastro.png",
                                    20, 20);
         registerButton.setIcon(icon);
+
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Verifica se a janela de cadastro já está visível
                 if (!cadastro.isVisible()) {
                     cadastro.setVisible(true);
                 }
@@ -59,7 +61,6 @@ public class Login extends JFrame {
                 String email = emailField.getText();
                 String password = new String(passwordField.getPassword());
 
-                // Verifica se algum dos campos está vazio
                 if (email.isEmpty() || password.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos.");
                     return;
@@ -75,12 +76,21 @@ public class Login extends JFrame {
                         String storedPassword = rs.getString("senha");
                         int ativo = rs.getInt("ativo");
                         int admin = rs.getInt("admin");
+                        String nomeUsuarioLogado = rs.getString("nome");
 
-                        if (storedPassword ==
-                            null) {
-                            // Primeiro acesso, definir senha
+                        if (storedPassword.equals(password) && ativo == 1) {
+                            JOptionPane.showMessageDialog(null, "Bem-Vindo");
+                            idUsuarioLogado = rs.getInt("id");
+
+                            // Cria a instância de EncomendasApp aqui
+                            EncomendasApp encomendasApp = new EncomendasApp(admin, nomeUsuarioLogado);
+                            encomendasApp.setVisible(true);
+                            dispose();
+                        }
+
+                        if (storedPassword == null) {
                             PreparedStatement updateStmt =
-              conn.prepareStatement("UPDATE clientes SET senha = ? WHERE email = ?");
+                                conn.prepareStatement("UPDATE clientes SET senha = ? WHERE email = ?");
                             updateStmt.setString(1, password);
                             updateStmt.setString(2, email);
                             updateStmt.executeUpdate();
@@ -89,12 +99,10 @@ public class Login extends JFrame {
                             JOptionPane.showMessageDialog(null, "Senha definida com sucesso. Faça login novamente.");
                         } else if (storedPassword.equals(password) && ativo == 1) {
                             JOptionPane.showMessageDialog(null, "Bem-Vindo");
+                            idUsuarioLogado = rs.getInt("id");
 
-                            idUsuarioLogado = rs.getInt("id"); // Armazena o id do usuário
-
-                            EncomendasApp encomendasApp = new EncomendasApp(admin); // Passa 'admin' para o construtor
+                            EncomendasApp encomendasApp = new EncomendasApp(admin, nomeUsuarioLogado);
                             encomendasApp.setVisible(true);
-
                             dispose();
                         } else if (ativo == 0) {
                             JOptionPane.showMessageDialog(null, "Usuário desativado");
