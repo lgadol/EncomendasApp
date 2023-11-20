@@ -3,6 +3,8 @@ package encomendasapp;
 import javax.swing.*;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import java.sql.*;
 
@@ -11,8 +13,12 @@ import java.util.Vector;
 public class Pedidos extends JFrame {
     private JTable dataTable;
     private JButton addButton;
+    private final int admin; // tornar a variável admin final
+    private final String nomeUsuarioLogado;
 
-    public Pedidos() {
+    public Pedidos(final int admin, final String nomeUsuarioLogado) {
+        this.admin = admin;
+        this.nomeUsuarioLogado = nomeUsuarioLogado;
         setLayout(new BorderLayout());
 
         Vector<String> columnNames = new Vector<>();
@@ -51,17 +57,17 @@ public class Pedidos extends JFrame {
         }
 
         dataTable = new JTable(data, columnNames);
-        addButton = new JButton("Adicionar cliente");
+        addButton = new JButton("Adicionar pedido");
 
         add(new JScrollPane(dataTable), BorderLayout.CENTER);
         add(addButton, BorderLayout.SOUTH);
 
-        /* addButton.addActionListener(new ActionListener() {
+        addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Abra a janela de adicionar pedido aqui
+                new AdicionarPedido(admin, nomeUsuarioLogado).setVisible(true);
             }
-        }); */
+        });
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(500, 400);

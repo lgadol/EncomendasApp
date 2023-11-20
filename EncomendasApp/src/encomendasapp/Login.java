@@ -13,6 +13,7 @@ public class Login extends JFrame {
     private JButton loginButton;
     private JButton registerButton;
     private Cadastro cadastro;
+    private int idUsuarioLogado;
 
     public Login() {
         setLayout(new GridLayout(3, 2));
@@ -84,11 +85,16 @@ public class Login extends JFrame {
                             updateStmt.setString(2, email);
                             updateStmt.executeUpdate();
                             updateStmt.close();
+
                             JOptionPane.showMessageDialog(null, "Senha definida com sucesso. Faça login novamente.");
                         } else if (storedPassword.equals(password) && ativo == 1) {
                             JOptionPane.showMessageDialog(null, "Bem-Vindo");
+
+                            idUsuarioLogado = rs.getInt("id"); // Armazena o id do usuário
+
                             EncomendasApp encomendasApp = new EncomendasApp(admin); // Passa 'admin' para o construtor
                             encomendasApp.setVisible(true);
+
                             dispose();
                         } else if (ativo == 0) {
                             JOptionPane.showMessageDialog(null, "Usuário desativado");
@@ -112,6 +118,10 @@ public class Login extends JFrame {
         setSize(500, 200);
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    public int getIdUsuarioLogado() {
+        return idUsuarioLogado;
     }
 
     public static void main(String[] args) {

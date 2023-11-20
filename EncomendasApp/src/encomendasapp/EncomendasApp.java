@@ -6,17 +6,44 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class EncomendasApp extends JFrame {
     private JButton clientesButton;
     private JButton pedidosButton;
     private JButton meusPedidosButton;
     private JButton logoffButton;
     private int admin;
+    private String nomeUsuarioLogado;
     private Clientes clientes;
     private Pedidos pedidos;
     private MeusPedidos meusPedidos;
 
-    public EncomendasApp(int admin) {
+    final int adminFinal = admin;
+    final String nomeUsuarioLogadoFinal = nomeUsuarioLogado;
+
+    public EncomendasApp(int idUsuarioLogado) {
+        try {
+            Connection conn = DataBaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement("SELECT admin, nome FROM clientes WHERE id = ?");
+            stmt.setInt(1, idUsuarioLogado);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                admin = rs.getInt("admin");
+                nomeUsuarioLogado = rs.getString("nome");
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
         this.admin = admin;
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -61,7 +88,7 @@ public class EncomendasApp extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if (pedidos == null) {
-                        pedidos = new Pedidos();
+                        pedidos = new Pedidos(admin, nomeUsuarioLogado);
                         pedidos.setVisible(true);
                     } else if (!pedidos.isVisible()) {
                         pedidos.setVisible(true);
