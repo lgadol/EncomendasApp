@@ -14,6 +14,7 @@ public class Login extends JFrame {
     private JButton registerButton;
     private Cadastro cadastro;
     private int idUsuarioLogado;
+    private EncomendasApp encomendasApp;
 
     public Login() {
         setLayout(new GridLayout(3, 2));
@@ -81,6 +82,12 @@ public class Login extends JFrame {
                         if (storedPassword.equals(password) && ativo == 1) {
                             JOptionPane.showMessageDialog(null, "Bem-Vindo");
                             idUsuarioLogado = rs.getInt("id");
+
+                            if (encomendasApp == null) {
+                                encomendasApp = new EncomendasApp(admin, nomeUsuarioLogado);
+                            }
+                            encomendasApp.setVisible(true);
+                            dispose();
 
                             // Cria a instância de EncomendasApp aqui
                             EncomendasApp encomendasApp = new EncomendasApp(admin, nomeUsuarioLogado);

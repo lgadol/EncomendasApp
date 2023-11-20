@@ -23,7 +23,7 @@ public class EncomendasApp extends JFrame {
         this.nomeUsuarioLogado = nomeUsuarioLogado;
 
         setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
+        gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         addButtons();
@@ -35,6 +35,9 @@ public class EncomendasApp extends JFrame {
     }
 
     private void addButtons() {
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+
         Dimension buttonSize = new Dimension(200, 50); // Define o tamanho preferido para os botões
 
         if (admin == 1) {
@@ -81,8 +84,8 @@ public class EncomendasApp extends JFrame {
                 }
             });
 
-            add(clientesButton, gbc);
-            add(pedidosButton, gbc);
+            buttonPanel.add(clientesButton);
+            buttonPanel.add(pedidosButton);
         }
 
         meusPedidosButton = new JButton("Meus Pedidos");
@@ -107,12 +110,8 @@ public class EncomendasApp extends JFrame {
             }
         });
 
-        add(meusPedidosButton, gbc);
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-        buttonPanel.add(Box.createHorizontalGlue());
-
+        buttonPanel.add(meusPedidosButton);
+        
         logoffButton = new JButton("Logoff");
         logoffButton.setPreferredSize(buttonSize);
         logoffButton.setBackground(new Color(255, 51, 0)); // Define a cor de fundo para um vermelho mais escuro
@@ -137,7 +136,6 @@ public class EncomendasApp extends JFrame {
                 if (meusPedidos != null) {
                     meusPedidos.dispose();
                 }
-
                 // Abre a tela de login
                 dispose();
                 new Login().setVisible(true);
@@ -147,4 +145,5 @@ public class EncomendasApp extends JFrame {
         buttonPanel.add(logoffButton);
         add(buttonPanel, gbc);
     }
+
 }
