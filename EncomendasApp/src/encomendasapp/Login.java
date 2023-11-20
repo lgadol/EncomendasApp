@@ -22,7 +22,7 @@ public class Login extends JFrame {
         emailField = new JTextField();
         passwordField = new JPasswordField();
 
-        loginButton = new JButton("Login");
+        loginButton = new JButton("Entrar");
         loginButton.setBackground(new Color(0, 204, 51));
         loginButton.setForeground(Color.BLACK);
         loginButton.setOpaque(true);

@@ -81,8 +81,8 @@ public class AdicionarPedido extends JFrame {
                 }
 
                 // Validação do formato dos kgs
-                if (!kgs.matches("^\\d{1,5}(\\.\\d{1,5})?$")) {
-                    JOptionPane.showMessageDialog(null, "Por favor, insira os kgs no formato 99999.99999.");
+                if (!kgs.matches("^\\d{1,3}(\\.\\d{1,2})?$")) {
+                    JOptionPane.showMessageDialog(null, "Por favor, insira os kgs no formato 999.99.");
                     return;
                 }
 

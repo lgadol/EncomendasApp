@@ -112,7 +112,7 @@ public class EncomendasApp extends JFrame {
 
         buttonPanel.add(meusPedidosButton);
         
-        logoffButton = new JButton("Logoff");
+        logoffButton = new JButton("Sair");
         logoffButton.setPreferredSize(buttonSize);
         logoffButton.setBackground(new Color(255, 51, 0)); // Define a cor de fundo para um vermelho mais escuro
         logoffButton.setForeground(Color.BLACK);

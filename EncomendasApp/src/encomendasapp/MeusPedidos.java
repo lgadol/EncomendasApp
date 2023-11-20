@@ -36,7 +36,7 @@ public class MeusPedidos extends JFrame {
         try {
             Connection conn = DataBaseConnection.getConnection();
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM pedidos WHERE id = nome_cliente");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM pedidos WHERE nome_cliente = nome_cliente");
 
             while (rs.next()) {
                 Vector<Object> vector = new Vector<>();
