@@ -61,40 +61,20 @@ public class Login extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String email = emailField.getText();
                 String password = new String(passwordField.getPassword());
-
                 if (email.isEmpty() || password.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos.");
                     return;
                 }
-
                 try {
                     Connection conn = DataBaseConnection.getConnection();
                     PreparedStatement stmt = conn.prepareStatement("SELECT * FROM clientes WHERE email = ?");
                     stmt.setString(1, email);
                     ResultSet rs = stmt.executeQuery();
-
                     if (rs.next()) {
                         String storedPassword = rs.getString("senha");
                         int ativo = rs.getInt("ativo");
                         int admin = rs.getInt("admin");
                         String nomeUsuarioLogado = rs.getString("nome");
-
-                        if (storedPassword.equals(password) && ativo == 1) {
-                            JOptionPane.showMessageDialog(null, "Bem-Vindo");
-                            idUsuarioLogado = rs.getInt("id");
-
-                            if (encomendasApp == null) {
-                                encomendasApp = new EncomendasApp(admin, nomeUsuarioLogado);
-                            }
-                            encomendasApp.setVisible(true);
-                            dispose();
-
-                            // Cria a instância de EncomendasApp aqui
-                            EncomendasApp encomendasApp = new EncomendasApp(admin, nomeUsuarioLogado);
-                            encomendasApp.setVisible(true);
-                            dispose();
-                        }
-
                         if (storedPassword == null) {
                             PreparedStatement updateStmt =
                                 conn.prepareStatement("UPDATE clientes SET senha = ? WHERE email = ?");
@@ -102,13 +82,13 @@ public class Login extends JFrame {
                             updateStmt.setString(2, email);
                             updateStmt.executeUpdate();
                             updateStmt.close();
-
                             JOptionPane.showMessageDialog(null, "Senha definida com sucesso. Faça login novamente.");
                         } else if (storedPassword.equals(password) && ativo == 1) {
                             JOptionPane.showMessageDialog(null, "Bem-Vindo");
                             idUsuarioLogado = rs.getInt("id");
-
-                            EncomendasApp encomendasApp = new EncomendasApp(admin, nomeUsuarioLogado);
+                            if (encomendasApp == null) {
+                                encomendasApp = new EncomendasApp(admin, nomeUsuarioLogado);
+                            }
                             encomendasApp.setVisible(true);
                             dispose();
                         } else if (ativo == 0) {
@@ -119,7 +99,6 @@ public class Login extends JFrame {
                     } else {
                         JOptionPane.showMessageDialog(null, "Dados incorretos");
                     }
-
                     rs.close();
                     stmt.close();
                     conn.close();
@@ -128,6 +107,7 @@ public class Login extends JFrame {
                 }
             }
         });
+
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 200);
