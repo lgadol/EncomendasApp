@@ -1,40 +1,65 @@
 package encomendasapp;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.sql.*;
-
 import java.util.Vector;
 
-public class Pedidos extends JFrame {
+import javax.swing.table.DefaultTableModel;
+
+public class Pedidos extends JFrame implements AtualizarTabela {
     private JTable dataTable;
     private JButton addButton;
-    private final int admin; // tornar a variável admin final
+    private final int admin;
     private final String nomeUsuarioLogado;
+    private Vector<String> columnNames;
 
     public Pedidos(final int admin, final String nomeUsuarioLogado) {
         this.admin = admin;
         this.nomeUsuarioLogado = nomeUsuarioLogado;
         setLayout(new BorderLayout());
 
-        Vector<String> columnNames = new Vector<>();
-        columnNames.add("id");
-        columnNames.add("nome_cliente");
-        columnNames.add("categoria");
-        columnNames.add("tipo_carne");
-        columnNames.add("tipo_corte");
-        columnNames.add("pago");
-        columnNames.add("pagamento_adiantado");
-        columnNames.add("tipo_pagamento");
-        columnNames.add("preco_pag");
-        columnNames.add("kgs");
-        columnNames.add("preco_kg");
-        columnNames.add("hora_encomenda");
+        columnNames = new Vector<>();
+        columnNames.add("Id");
+        columnNames.add("Nome do Cliente");
+        columnNames.add("Categoria");
+        columnNames.add("Tipo de carne");
+        columnNames.add("Tipo do Desenho");
+        columnNames.add("Pago");
+        columnNames.add("Pagamento Adiantado");
+        columnNames.add("Tipo de Pagamento");
+        columnNames.add("Preço Pago");
+        columnNames.add("Quilos");
+        columnNames.add("Preço por Kg");
+        columnNames.add("Data da Encomenda");
 
+        dataTable = new JTable();
+        addButton = new JButton("Adicionar pedido");
+
+        add(new JScrollPane(dataTable), BorderLayout.CENTER);
+        add(addButton, BorderLayout.SOUTH);
+
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AdicionarPedido(admin, nomeUsuarioLogado, Pedidos.this).setVisible(true);
+            }
+        });
+
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(500, 400);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setLocationRelativeTo(null);
+        setVisible(true);
+
+        // Chame o método para preencher a tabela quando a janela for aberta
+        atualizarDadosTabela();
+    }
+
+    // Método para atualizar os dados da tabela
+    public void atualizarDadosTabela() {
         Vector<Vector<Object>> data = new Vector<>();
         try {
             Connection conn = DataBaseConnection.getConnection();
@@ -56,22 +81,8 @@ public class Pedidos extends JFrame {
             ex.printStackTrace();
         }
 
-        dataTable = new JTable(data, columnNames);
-        addButton = new JButton("Adicionar pedido");
-
-        add(new JScrollPane(dataTable), BorderLayout.CENTER);
-        add(addButton, BorderLayout.SOUTH);
-
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new AdicionarPedido(admin, nomeUsuarioLogado).setVisible(true);
-            }
-        });
-
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(500, 400);
-        setLocationRelativeTo(null);
-        setVisible(true);
+        // Atualiza os dados da tabela
+        DefaultTableModel model = (DefaultTableModel) dataTable.getModel();
+        model.setDataVector(data, columnNames);
     }
 }

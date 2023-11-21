@@ -1,5 +1,7 @@
 package encomendasapp;
 
+import encomendasapp.AtualizarTabela;
+
 import javax.swing.*;
 
 import java.awt.*;
@@ -9,16 +11,19 @@ import java.awt.event.ActionListener;
 import java.sql.*;
 
 public class AdicionarPedido extends JFrame {
+
     private JTextField nomeClienteField, tipoCarneField, tipoCorteField, precoPagoField, kgsField;
     private JComboBox<String> categoriaBox, tipoPagamentoBox;
     private JCheckBox pagoBox, pagamentoAdiantadoBox;
     private JButton confirmarButton;
     private final int admin;
     private final String nomeUsuarioLogado;
+    private final AtualizarTabela pedidosWindow;
 
-    public AdicionarPedido(final int admin, final String nomeUsuarioLogado) {
+    public AdicionarPedido(final int admin, final String nomeUsuarioLogado, final AtualizarTabela pedidosWindow) {
         this.admin = admin;
         this.nomeUsuarioLogado = nomeUsuarioLogado;
+        this.pedidosWindow = pedidosWindow;
         setLayout(new GridLayout(10, 2));
 
         // Inicializando os campos
@@ -102,10 +107,8 @@ public class AdicionarPedido extends JFrame {
                     ps.setString(9, kgs);
                     ps.executeUpdate();
                     JOptionPane.showMessageDialog(null, "Pedido adicionado com sucesso!");
-
-                    // Fecha a janela
-                    dispose();
-
+                    pedidosWindow.atualizarDadosTabela();
+                    dispose(); // Fecha a janela
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
@@ -114,7 +117,6 @@ public class AdicionarPedido extends JFrame {
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(500, 400);
-        setLocationRelativeTo(null);
-        setVisible(true);
+        setResizable(false);
     }
 }

@@ -16,35 +16,63 @@ public class EncomendasApp extends JFrame {
     private Clientes clientes;
     private Pedidos pedidos;
     private MeusPedidos meusPedidos;
-    private GridBagConstraints gbc;
+    private GridBagConstraints gbc; // Adicione esta linha
+    private JLabel nomeUsuarioLabel;
+    private JPanel panel;
+    private JPanel buttonPanel;
 
     public EncomendasApp(int admin, String nomeUsuarioLogado) {
         this.admin = admin;
         this.nomeUsuarioLogado = nomeUsuarioLogado;
 
-        setLayout(new GridBagLayout());
-        gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        nomeUsuarioLabel = new JLabel("<html>" + "Bem-vindo" + "<br>" + nomeUsuarioLogado + "<html>");
+        nomeUsuarioLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        nomeUsuarioLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(nomeUsuarioLabel);
+
+        gbc = new GridBagConstraints(); // Inicialize gbc aqui
+
         addButtons();
+
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+        mainPanel.add(panel, BorderLayout.NORTH);
+        mainPanel.add(buttonPanel, BorderLayout.CENTER);
+
+        add(mainPanel);
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 400);
+        setResizable(false);
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
     private void addButtons() {
-        JPanel buttonPanel = new JPanel();
+        buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
         Dimension buttonSize = new Dimension(200, 50); // Define o tamanho preferido para os botões
 
         if (admin == 1) {
             clientesButton = new JButton("Clientes");
-            pedidosButton = new JButton("Pedidos");
+            clientesButton.setMinimumSize(buttonSize);
+            clientesButton.setMaximumSize(buttonSize);
             clientesButton.setPreferredSize(buttonSize);
+            JPanel clientesButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            clientesButtonPanel.add(clientesButton);
+            buttonPanel.add(clientesButtonPanel);
+
+            pedidosButton = new JButton("Pedidos");
+            pedidosButton.setMinimumSize(buttonSize);
+            pedidosButton.setMaximumSize(buttonSize);
             pedidosButton.setPreferredSize(buttonSize);
+            JPanel pedidosButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            pedidosButtonPanel.add(pedidosButton);
+            buttonPanel.add(pedidosButtonPanel);
 
             ImageIcon iconClientes =
                 IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\clientes.png",
@@ -83,13 +111,15 @@ public class EncomendasApp extends JFrame {
                     }
                 }
             });
-
-            buttonPanel.add(clientesButton);
-            buttonPanel.add(pedidosButton);
         }
 
         meusPedidosButton = new JButton("Meus Pedidos");
         meusPedidosButton.setPreferredSize(buttonSize);
+        meusPedidosButton.setMinimumSize(buttonSize);
+        meusPedidosButton.setMaximumSize(buttonSize);
+        JPanel meusPedidosButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        meusPedidosButtonPanel.add(meusPedidosButton);
+        buttonPanel.add(meusPedidosButtonPanel);
 
         ImageIcon iconMeusPedidos =
             IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\meus_pedidos.png",
@@ -102,7 +132,7 @@ public class EncomendasApp extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (meusPedidos == null) {
-                    meusPedidos = new MeusPedidos();
+                    meusPedidos = new MeusPedidos(admin, nomeUsuarioLogado);
                     meusPedidos.setVisible(true);
                 } else if (!meusPedidos.isVisible()) {
                     meusPedidos.setVisible(true);
@@ -110,13 +140,20 @@ public class EncomendasApp extends JFrame {
             }
         });
 
-        buttonPanel.add(meusPedidosButton);
-        
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+
         logoffButton = new JButton("Sair");
         logoffButton.setPreferredSize(buttonSize);
-        logoffButton.setBackground(new Color(255, 51, 0)); // Define a cor de fundo para um vermelho mais escuro
+        logoffButton.setBackground(new Color(255, 51, 0));
         logoffButton.setForeground(Color.BLACK);
         logoffButton.setOpaque(true);
+        logoffButton.setMinimumSize(buttonSize);
+        logoffButton.setMaximumSize(buttonSize);
+        JPanel logoffButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        logoffButtonPanel.add(logoffButton);
+        buttonPanel.add(logoffButtonPanel);
+
 
         ImageIcon icon =
             IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\sair.png",
@@ -141,9 +178,14 @@ public class EncomendasApp extends JFrame {
                 new Login().setVisible(true);
             }
         });
+        
+        // Cria um novo GridBagConstraints para centralizar o buttonPanel verticalmente
+        GridBagConstraints gbcPanel = new GridBagConstraints();
+        gbcPanel.gridwidth = GridBagConstraints.REMAINDER;
+        gbcPanel.fill = GridBagConstraints.VERTICAL;
+        gbcPanel.weighty = 1;
 
-        buttonPanel.add(logoffButton);
-        add(buttonPanel, gbc);
+        panel.add(buttonPanel, BorderLayout.CENTER);
+        buttonPanel.add(Box.createVerticalGlue());
     }
-
 }

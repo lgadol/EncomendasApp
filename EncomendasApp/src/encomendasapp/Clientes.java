@@ -16,15 +16,15 @@ public class Clientes extends JFrame {
         setLayout(new BorderLayout());
 
         Vector<String> columnNames = new Vector<>();
-        columnNames.add("id");
-        columnNames.add("admin");
-        columnNames.add("ativo");
-        columnNames.add("nome");
-        columnNames.add("telefone");
-        columnNames.add("email");
-        columnNames.add("cidade");
-        columnNames.add("estado");
-        columnNames.add("endereco");
+        columnNames.add("Id");
+        columnNames.add("Admin");
+        columnNames.add("Ativo");
+        columnNames.add("Nome");
+        columnNames.add("Telefone");
+        columnNames.add("Email");
+        columnNames.add("Cidade");
+        columnNames.add("Estado");
+        columnNames.add("Endereco");
 
         Vector<Vector<Object>> data = new Vector<>();
         try {
@@ -62,6 +62,7 @@ public class Clientes extends JFrame {
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(500, 400);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setVisible(true);
     }

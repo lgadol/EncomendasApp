@@ -7,6 +7,8 @@ import java.awt.event.*;
 
 import java.sql.*;
 
+import java.util.prefs.Preferences;
+
 public class Login extends JFrame {
     private JTextField emailField;
     private JPasswordField passwordField;
@@ -15,9 +17,10 @@ public class Login extends JFrame {
     private Cadastro cadastro;
     private int idUsuarioLogado;
     private EncomendasApp encomendasApp;
+    private JCheckBox rememberMeCheckBox;
 
     public Login() {
-        setLayout(new GridLayout(3, 2));
+        setLayout(new GridLayout(4, 3));
 
         emailField = new JTextField();
         passwordField = new JPasswordField();
@@ -26,6 +29,11 @@ public class Login extends JFrame {
         loginButton.setBackground(new Color(0, 204, 51));
         loginButton.setForeground(Color.BLACK);
         loginButton.setOpaque(true);
+
+        ImageIcon loginIcon =
+            IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\entrar.png",
+                                   20, 20);
+        loginButton.setIcon(loginIcon);
 
         cadastro = new Cadastro();
         cadastro.setVisible(false);
@@ -84,10 +92,13 @@ public class Login extends JFrame {
                             updateStmt.close();
                             JOptionPane.showMessageDialog(null, "Senha definida com sucesso. Faça login novamente.");
                         } else if (storedPassword.equals(password) && ativo == 1) {
-                            JOptionPane.showMessageDialog(null, "Bem-Vindo");
+                            JOptionPane.showMessageDialog(null, "Bem-Vindo, " + nomeUsuarioLogado);
                             idUsuarioLogado = rs.getInt("id");
                             if (encomendasApp == null) {
                                 encomendasApp = new EncomendasApp(admin, nomeUsuarioLogado);
+                            }
+                            if (rememberMeCheckBox.isSelected()) {
+                                rememberUser(email, password);
                             }
                             encomendasApp.setVisible(true);
                             dispose();
@@ -108,9 +119,12 @@ public class Login extends JFrame {
             }
         });
 
+        rememberMeCheckBox = new JCheckBox("Lembrar-me");
+        add(rememberMeCheckBox);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 200);
+        setResizable(false);
         setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -119,7 +133,20 @@ public class Login extends JFrame {
         return idUsuarioLogado;
     }
 
+    public void rememberUser(String email, String password) {
+        Preferences prefs = Preferences.userNodeForPackage(Login.class);
+        prefs.put("email", email);
+        prefs.put("password", password);
+    }
+
     public static void main(String[] args) {
-        new Login();
+        Login login = new Login();
+        Preferences prefs = Preferences.userNodeForPackage(Login.class);
+        String email = prefs.get("email", null);
+        String password = prefs.get("password", null);
+        if (email != null && password != null) {
+            login.emailField.setText(email);
+            login.passwordField.setText(password);
+        }
     }
 }
