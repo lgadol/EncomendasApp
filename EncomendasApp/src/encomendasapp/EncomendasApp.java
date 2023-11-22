@@ -16,7 +16,7 @@ public class EncomendasApp extends JFrame {
     private Clientes clientes;
     private Pedidos pedidos;
     private MeusPedidos meusPedidos;
-    private GridBagConstraints gbc; // Adicione esta linha
+    private GridBagConstraints gbc;
     private JLabel nomeUsuarioLabel;
     private JPanel panel;
     private JPanel buttonPanel;
@@ -178,7 +178,7 @@ public class EncomendasApp extends JFrame {
                 new Login().setVisible(true);
             }
         });
-        
+
         // Cria um novo GridBagConstraints para centralizar o buttonPanel verticalmente
         GridBagConstraints gbcPanel = new GridBagConstraints();
         gbcPanel.gridwidth = GridBagConstraints.REMAINDER;
