@@ -117,6 +117,7 @@ public class AdicionarPedido extends JFrame {
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(500, 400);
-        setResizable(false);
+        setLocationRelativeTo(null);
+        setVisible(true);
     }
 }

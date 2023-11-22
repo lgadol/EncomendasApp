@@ -96,7 +96,7 @@ public class AdicionarCliente extends JFrame {
         });
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(300, 200);
+        setSize(500, 400);
         setLocationRelativeTo(null);
         setVisible(true);
     }
