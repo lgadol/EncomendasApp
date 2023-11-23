@@ -25,7 +25,7 @@ public class EncomendasApp extends JFrame {
         this.admin = admin;
         this.nomeUsuarioLogado = nomeUsuarioLogado;
 
-        nomeUsuarioLabel = new JLabel("<html>" + "Bem-vindo" + "<br>" + nomeUsuarioLogado + "<html>");
+        nomeUsuarioLabel = new JLabel("<html>" + "Bem-vindo," + "<br>" + nomeUsuarioLogado + "!" + "<html>");
         nomeUsuarioLabel.setFont(new Font("Arial", Font.BOLD, 20));
         nomeUsuarioLabel.setHorizontalAlignment(JLabel.CENTER);
 

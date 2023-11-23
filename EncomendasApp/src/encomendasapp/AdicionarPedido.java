@@ -39,7 +39,7 @@ public class AdicionarPedido extends JFrame {
         confirmarButton = new JButton("Confirmar");
 
         // Habilita ou desabilita os campos com base no valor de admin
-        tipoCorteField.setEnabled(admin == 1);
+        nomeClienteField.setEnabled(admin == 1);
         pagoBox.setEnabled(admin == 1);
         pagamentoAdiantadoBox.setEnabled(admin == 1);
         precoPagoField.setEnabled(admin == 1);

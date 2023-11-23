@@ -15,13 +15,13 @@ import java.util.Vector;
 public class Clientes extends JFrame implements AtualizarTabela {
     private JTable dataTable;
     private JButton addButton;
+    private JButton clearButton;
     private int isEditing = -1;
     private Vector<Vector<Object>> data = new Vector<>();
     private Vector<String> columnNames = new Vector<>();
 
     public Clientes() {
         setLayout(new BorderLayout());
-
         columnNames = new Vector<>();
         columnNames.add("Id");
         columnNames.add("Admin");
@@ -36,9 +36,34 @@ public class Clientes extends JFrame implements AtualizarTabela {
         columnNames.add("Editar");
         columnNames.add("Salvar");
 
+        // Botão Adicionar Clientes
+        addButton = new JButton("Adicionar Cliente");
+        ImageIcon addIcon =
+            new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\adicionar-usuario.png");
+        Image addImage = addIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        addButton.setBackground(new Color(0, 204, 51));
+        addIcon = new ImageIcon(addImage);
+
+        // Botão Limpar Registros
+        clearButton = new JButton("Limpar Registros");
+        ImageIcon clearIcon =
+            new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\deletar-lixeira.png");
+        Image clearImage = clearIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        clearButton.setBackground(new Color(255, 51, 0));
+        clearIcon = new ImageIcon(clearImage);
+
+        // Adicionando os botões
+        addButton.setIcon(addIcon);
+        clearButton.setIcon(clearIcon);
+
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
+        buttonPanel.add(addButton);
+        buttonPanel.add(clearButton);
+
+        add(buttonPanel, BorderLayout.SOUTH);
+
         final CustomTableModel tableModel = new CustomTableModel(data, columnNames);
         dataTable = new JTable(tableModel);
-        addButton = new JButton("Adicionar Cliente");
 
         dataTable.getColumn("Editar").setCellRenderer(new IconRenderer("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\editar.png"));
         dataTable.getColumn("R. Senha").setCellRenderer(new IconRenderer("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\reiniciar.png"));
@@ -47,7 +72,6 @@ public class Clientes extends JFrame implements AtualizarTabela {
         dataTable.addMouseListener(new JTableButtonMouseListener(dataTable));
 
         add(new JScrollPane(dataTable), BorderLayout.CENTER);
-        add(addButton, BorderLayout.SOUTH);
 
         addButton.addActionListener(new ActionListener() {
             @Override
@@ -56,12 +80,51 @@ public class Clientes extends JFrame implements AtualizarTabela {
             }
         });
 
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    // Conecta ao banco de dados e verifica se existem registros
+                    Connection conn = DataBaseConnection.getConnection();
+                    Statement stmt = conn.createStatement();
+                    ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM clientes");
+                    rs.next();
+                    int count = rs.getInt(1);
+                    rs.close();
+                    stmt.close();
+
+                    if (count == 0) {
+                        // Se não houver registros, mostra uma mensagem
+                        JOptionPane.showMessageDialog(null, "Não há nenhum cliente para excluir");
+                    } else {
+                        // Se houver registros, mostra um diálogo de confirmação
+                        int confirm =
+                            JOptionPane.showConfirmDialog(null, "Tem certeza de que deseja excluir todos os registros?",
+                                                          "Confirmação", JOptionPane.YES_NO_OPTION);
+                        if (confirm == JOptionPane.YES_OPTION) {
+                            // Exclui todos os registros
+                            PreparedStatement deleteStmt = conn.prepareStatement("DELETE FROM clientes");
+                            deleteStmt.executeUpdate();
+                            deleteStmt.close();
+
+                            // Atualiza a tabela
+                            atualizarDadosTabela();
+                        }
+                    }
+
+                    conn.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(500, 400);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setVisible(true);
-        
+
         atualizarDadosTabela();
     }
 
@@ -72,7 +135,6 @@ public class Clientes extends JFrame implements AtualizarTabela {
             Connection conn = DataBaseConnection.getConnection();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM clientes");
-
             while (rs.next()) {
                 Vector<Object> vector = new Vector<>();
                 for (int columnIndex = 1; columnIndex <= rs.getMetaData().getColumnCount(); columnIndex++) {
@@ -80,7 +142,6 @@ public class Clientes extends JFrame implements AtualizarTabela {
                 }
                 data.add(vector);
             }
-
             rs.close();
             stmt.close();
             conn.close();

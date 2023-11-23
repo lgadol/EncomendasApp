@@ -23,7 +23,7 @@ public class AdicionarCliente extends JFrame {
     };
     JComboBox estadoBox = new JComboBox(estados);
 
-    public AdicionarCliente(AtualizarTabela atualizarTabela) {
+    public AdicionarCliente(final AtualizarTabela atualizarTabela) {
         this.atualizarTabela = atualizarTabela;
         
         setLayout(new GridLayout(0, 2));
@@ -88,6 +88,8 @@ public class AdicionarCliente extends JFrame {
                         conn.close();
 
                         JOptionPane.showMessageDialog(null, "Cliente adicionado com sucesso!");
+                        
+                        atualizarTabela.atualizarDadosTabela();
                     } catch (SQLException ex) {
                         ex.printStackTrace();
                     }
