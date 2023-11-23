@@ -5,6 +5,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import java.math.BigDecimal;
 
 import java.sql.*;
 
@@ -24,6 +28,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
         this.admin = admin;
         this.nomeUsuarioLogado = nomeUsuarioLogado;
         setLayout(new BorderLayout());
+
         columnNames = new Vector<>();
         columnNames.add("Id");
         columnNames.add("Nome do Cliente");
@@ -57,11 +62,9 @@ public class Pedidos extends JFrame implements AtualizarTabela {
         // Adicionando os botões
         addButton.setIcon(addIcon);
         clearButton.setIcon(clearIcon);
-
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
         buttonPanel.add(addButton);
         buttonPanel.add(clearButton);
-
         add(buttonPanel, BorderLayout.SOUTH);
 
         addButton.addActionListener(new ActionListener() {
@@ -103,7 +106,6 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                     }
 
                     conn.close();
-
                     // Atualiza a tabela após todas as exclusões terem sido concluídas
                     atualizarDadosTabela();
                 } catch (SQLException ex) {
@@ -112,8 +114,69 @@ public class Pedidos extends JFrame implements AtualizarTabela {
             }
         });
 
-        // Inicialize dataTable antes de chamar atualizarDadosTabela()
+        // Inicialize dataTable antes de adicionar o MouseListener
         dataTable = new JTable(new DefaultTableModel());
+
+        final int[] selectedRow = new int[1];
+        dataTable.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent mouseEvent) {
+                JTable table = (JTable) mouseEvent.getSource();
+                Point point = mouseEvent.getPoint();
+                selectedRow[0] = table.rowAtPoint(point);
+                if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
+                    // Seu código para a ação de duplo clique vai aqui
+
+                }
+                if (mouseEvent.getButton() == MouseEvent.BUTTON3) {
+                    // Verifica se o botão direito do mouse foi pressionado
+                    JPopupMenu popupMenu = new JPopupMenu();
+                    JMenuItem menuItemEdit = new JMenuItem("Editar");
+                    JMenuItem menuItemDelete = new JMenuItem("Excluir");
+                    menuItemEdit.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            // Seu código para a ação de edição vai aqui
+                        }
+                    });
+                    menuItemDelete.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            // Obtenha o ID do pedido na linha selecionada. Supondo que o ID seja a primeira coluna da tabela.
+                            int pedidoId = ((BigDecimal) dataTable.getValueAt(selectedRow[0], 0)).intValue();
+
+                            try {
+                                // Conecta ao banco de dados
+                                Connection conn = DataBaseConnection.getConnection();
+
+                                // Cria a query SQL para excluir o pedido com o ID especificado
+                                String sql = "DELETE FROM pedidos WHERE Id = ?";
+
+                                // Cria um PreparedStatement para executar a query SQL
+                                PreparedStatement pstmt = conn.prepareStatement(sql);
+
+                                // Define o valor do parâmetro na query SQL
+                                pstmt.setInt(1, pedidoId);
+
+                                // Executa a query SQL
+                                pstmt.executeUpdate();
+
+                                // Fecha o PreparedStatement e a conexão
+                                pstmt.close();
+                                conn.close();
+
+                                // Atualiza a tabela após a exclusão
+                                atualizarDadosTabela();
+                            } catch (SQLException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    });
+                    popupMenu.add(menuItemEdit);
+                    popupMenu.add(menuItemDelete);
+                    popupMenu.show(table, mouseEvent.getX(), mouseEvent.getY());
+                }
+            }
+        });
 
         add(new JScrollPane(dataTable), BorderLayout.CENTER);
 
