@@ -28,18 +28,19 @@ public class AdicionarPedido extends JFrame {
 
         // Inicializando os campos
         nomeClienteField = new JTextField(nomeUsuarioLogado);
-        categoriaBox = new JComboBox<>(new String[] { "Gado", "Porco", "Outro" });
+        categoriaBox = new JComboBox<>(new String[] { "GADO", "PORCO", "FRANGO", "OUTRO" });
         tipoCarneField = new JTextField();
         tipoCorteField = new JTextField();
         pagoBox = new JCheckBox();
         pagamentoAdiantadoBox = new JCheckBox();
-        tipoPagamentoBox = new JComboBox<>(new String[] { "Dinheiro", "Crédito", "Débito", "Pix" });
+        tipoPagamentoBox = new JComboBox<>(new String[] { "DINHEIRO", "CREDITO", "DEBITO", "PIX", "OUTRO" });
         precoPagoField = new JTextField();
         kgsField = new JTextField();
         confirmarButton = new JButton("Confirmar");
 
         // Habilita ou desabilita os campos com base no valor de admin
         nomeClienteField.setEnabled(admin == 1);
+        tipoCorteField.setEnabled(admin == 1);
         pagoBox.setEnabled(admin == 1);
         pagamentoAdiantadoBox.setEnabled(admin == 1);
         precoPagoField.setEnabled(admin == 1);
@@ -51,7 +52,7 @@ public class AdicionarPedido extends JFrame {
         add(categoriaBox);
         add(new JLabel("Tipo de Carne:"));
         add(tipoCarneField);
-        add(new JLabel("Tipo de Corte:"));
+        add(new JLabel("Tipo de Desenho:"));
         add(tipoCorteField);
         add(new JLabel("Pago:"));
         add(pagoBox);
@@ -88,6 +89,12 @@ public class AdicionarPedido extends JFrame {
                 // Validação do formato dos kgs
                 if (!kgs.matches("^\\d{1,3}(\\,\\d{1,2})?$")) {
                     JOptionPane.showMessageDialog(null, "Por favor, insira os kgs no formato 999,99.");
+                    return;
+                }
+                
+                // Validação do preço
+                if (!precoPago.matches("^\\d{1,3}(\\,\\d{1,2})?$")) {
+                    JOptionPane.showMessageDialog(null, "Por favor, insira o preço no formato 999,99.");
                     return;
                 }
 
