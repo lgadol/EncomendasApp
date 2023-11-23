@@ -91,11 +91,13 @@ public class AdicionarPedido extends JFrame {
                     JOptionPane.showMessageDialog(null, "Por favor, insira os kgs no formato 999,99.");
                     return;
                 }
-                
+
                 // Validação do preço
-                if (!precoPago.matches("^\\d{1,3}(\\,\\d{1,2})?$")) {
-                    JOptionPane.showMessageDialog(null, "Por favor, insira o preço no formato 999,99.");
-                    return;
+                if (admin == 1) {
+                    if (!precoPago.matches("^\\d{1,3}(\\,\\d{1,2})?$")) {
+                        JOptionPane.showMessageDialog(null, "Por favor, insira o preço no formato 999,99.");
+                        return;
+                    }
                 }
 
                 // Conexão com o banco de dados e inserção dos dados

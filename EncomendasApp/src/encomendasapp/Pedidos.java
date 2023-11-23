@@ -14,6 +14,8 @@ import java.sql.*;
 
 import java.util.Vector;
 
+import java.util.logging.Logger;
+
 import javax.swing.table.DefaultTableModel;
 
 public class Pedidos extends JFrame implements AtualizarTabela {
@@ -124,8 +126,11 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                 Point point = mouseEvent.getPoint();
                 selectedRow[0] = table.rowAtPoint(point);
                 if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
-                    // Seu código para a ação de duplo clique vai aqui
+                    // Obtenha o ID do pedido na linha selecionada. Supondo que o ID seja a primeira coluna da tabela.
+                    int pedidoId = ((BigDecimal) dataTable.getValueAt(selectedRow[0], 0)).intValue();
 
+                    // Abra a janela de edição passando o ID do pedido
+                    new EditarPedido(pedidoId).setVisible(true);
                 }
                 if (mouseEvent.getButton() == MouseEvent.BUTTON3) {
                     // Verifica se o botão direito do mouse foi pressionado
@@ -135,7 +140,11 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                     menuItemEdit.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            // Seu código para a ação de edição vai aqui
+                            // Obtenha o ID do pedido na linha selecionada. Supondo que o ID seja a primeira coluna da tabela.
+                            int pedidoId = ((BigDecimal) dataTable.getValueAt(selectedRow[0], 0)).intValue();
+
+                            // Abra a janela de edição passando o ID do pedido
+                            new EditarPedido(pedidoId).setVisible(true);
                         }
                     });
                     menuItemDelete.addActionListener(new ActionListener() {
@@ -188,6 +197,150 @@ public class Pedidos extends JFrame implements AtualizarTabela {
 
         // Chame o método para preencher a tabela quando a janela for aberta
         atualizarDadosTabela();
+    }
+
+    private static final Logger LOGGER = Logger.getLogger(EditarPedido.class.getName());
+
+    public class EditarPedido extends JFrame {
+        private int pedidoId;
+
+        private JTextField campoNomeCliente;
+        private JComboBox<String> campoCategoria;
+        private JTextField campoTipoCarne;
+        private JTextField campoTipoCorte;
+        private JComboBox<String> campoPago;
+        private JComboBox<String> campoPagamentoAdiantado;
+        private JComboBox<String> campoTipoPagamento;
+        private JTextField campoPrecoPago;
+        private JTextField campoKgs;
+
+        private JButton botaoSalvar;
+
+        public EditarPedido(int pedidoId) {
+            this.pedidoId = pedidoId;
+
+            campoNomeCliente = new JTextField();
+            campoCategoria = new JComboBox<>(new String[] { "GADO", "PORCO", "FRANGO", "OUTRO" });
+            campoTipoCarne = new JTextField();
+            campoTipoCorte = new JTextField();
+            campoPago = new JComboBox<>(new String[] { "SIM", "NÃO" });
+            campoPagamentoAdiantado = new JComboBox<>(new String[] { "SIM", "NÃO" });
+            campoTipoPagamento = new JComboBox<>(new String[] { "DINHEIRO", "CREDITO", "DEBITO", "PIX", "OUTRO" });
+            campoPrecoPago = new JTextField();
+            campoKgs = new JTextField();
+
+            // Crie um painel e adicione os campos a ele
+            JPanel panel = new JPanel(new GridLayout(10, 2));
+            panel.add(new JLabel("Nome do Cliente"));
+            panel.add(campoNomeCliente);
+            panel.add(new JLabel("Categoria"));
+            panel.add(campoCategoria);
+            panel.add(new JLabel("Tipo de Carne"));
+            panel.add(campoTipoCarne);
+            panel.add(new JLabel("Tipo de Corte"));
+            panel.add(campoTipoCorte);
+            panel.add(new JLabel("Pago"));
+            panel.add(campoPago);
+            panel.add(new JLabel("Pagamento Adiantado"));
+            panel.add(campoPagamentoAdiantado);
+            panel.add(new JLabel("Tipo de Pagamento"));
+            panel.add(campoTipoPagamento);
+            panel.add(new JLabel("Preço Pago"));
+            panel.add(campoPrecoPago);
+            panel.add(new JLabel("Kgs"));
+            panel.add(campoKgs);
+
+            // Inicialize e adicione o botão Salvar
+            botaoSalvar = new JButton("Salvar");
+            panel.add(botaoSalvar);
+
+            botaoSalvar.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    salvarDadosPedido();
+                }
+            });
+
+            // Adicione o painel ao JFrame
+            add(panel);
+
+            // Depois de adicionar os componentes, preencha-os com os dados do pedido
+            preencherDadosPedido();
+        }
+
+        private void preencherDadosPedido() {
+            try {
+                Connection conn = DataBaseConnection.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM pedidos WHERE id = ?");
+                pstmt.setInt(1, pedidoId);
+                ResultSet rs = pstmt.executeQuery();
+
+                if (rs.next()) {
+                    campoNomeCliente.setText(rs.getString("nome_cliente"));
+                    campoCategoria.setSelectedItem(rs.getString("categoria"));
+                    campoTipoCarne.setText(rs.getString("tipo_carne"));
+                    campoTipoCorte.setText(rs.getString("tipo_corte"));
+                    campoPago.setSelectedItem(rs.getString("pago"));
+                    campoPagamentoAdiantado.setSelectedItem(rs.getString("pagamento_adiantado"));
+                    campoTipoPagamento.setSelectedItem(rs.getString("tipo_pagamento"));
+                    campoPrecoPago.setText(rs.getString("preco_pago"));
+                    campoKgs.setText(rs.getString("kgs"));
+                }
+
+                rs.close();
+                pstmt.close();
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setSize(500, 400);
+            setLocationRelativeTo(null);
+            setVisible(true);
+        }
+
+        private void salvarDadosPedido() {
+            LOGGER.info("Iniciando salvarDadosPedido...");
+            try {
+                LOGGER.info("Conectando ao banco de dados...");
+                Connection conn = DataBaseConnection.getConnection();
+                LOGGER.info("Conexão estabelecida.");
+
+                String sql =
+                    "UPDATE pedidos SET nome_cliente = ?, categoria = ?, tipo_carne = ?, tipo_corte = ?, pago = ?, " +
+                    "pagamento_adiantado = ?, tipo_pagamento = ?, preco_pago = ?, kgs = ? WHERE id = ?";
+
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, campoNomeCliente.getText().toUpperCase());
+                pstmt.setString(2, (String) campoCategoria.getSelectedItem());
+                pstmt.setString(3, campoTipoCarne.getText().toUpperCase());
+                pstmt.setString(4, campoTipoCorte.getText().toUpperCase());
+                pstmt.setInt(5, "SIM".equals(campoPago.getSelectedItem()) ? 1 : 0);
+                pstmt.setInt(6, "SIM".equals(campoPagamentoAdiantado.getSelectedItem()) ? 1 : 0);
+                pstmt.setString(7, (String) campoTipoPagamento.getSelectedItem());
+                pstmt.setString(8, campoPrecoPago.getText().toUpperCase());
+                pstmt.setString(9, campoKgs.getText().toUpperCase());
+                pstmt.setInt(10, pedidoId);
+
+                LOGGER.info("Executando a atualização...");
+                pstmt.executeUpdate();
+                LOGGER.info("Atualização executada.");
+                pstmt.close();
+
+                conn.close();
+            } catch (SQLException ex) {
+                LOGGER.severe("Uma exceção SQLException foi lançada.");
+                ex.printStackTrace();
+            }
+            LOGGER.info("Finalizando salvarDadosPedido.");
+
+            // Feche a janela de edição
+            dispose();
+
+            // Atualize a lista
+            atualizarDadosTabela();
+        }
     }
 
     // Método para atualizar os dados da tabela
