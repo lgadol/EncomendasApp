@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.util.regex.Pattern;
@@ -70,6 +71,31 @@ public class AdicionarCliente extends JFrame {
                 } else {
                     try {
                         Connection conn = DataBaseConnection.getConnection();
+
+                        // Verificar se o email já existe
+                        PreparedStatement checkEmailStmt =
+                            conn.prepareStatement("SELECT * FROM clientes WHERE email = ?");
+                        checkEmailStmt.setString(1, emailField.getText());
+                        ResultSet checkEmailRs = checkEmailStmt.executeQuery();
+                        if (checkEmailRs.next()) {
+                            JOptionPane.showMessageDialog(null, "Este email já está sendo usado por outro cliente.");
+                            return;
+                        }
+                        checkEmailRs.close();
+                        checkEmailStmt.close();
+
+                        // Verificar se o telefone já existe
+                        PreparedStatement checkTelefoneStmt =
+                            conn.prepareStatement("SELECT * FROM clientes WHERE telefone = ?");
+                        checkTelefoneStmt.setString(1, telefoneField.getText());
+                        ResultSet checkTelefoneRs = checkTelefoneStmt.executeQuery();
+                        if (checkTelefoneRs.next()) {
+                            JOptionPane.showMessageDialog(null, "Este telefone já está sendo usado por outro cliente.");
+                            return;
+                        }
+                        checkTelefoneRs.close();
+                        checkTelefoneStmt.close();
+
                         PreparedStatement stmt =
                             conn.prepareStatement("INSERT INTO clientes (admin, ativo, nome, telefone, email, cidade, estado, endereco) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 

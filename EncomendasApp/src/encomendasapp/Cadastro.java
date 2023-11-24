@@ -8,6 +8,9 @@ import java.awt.event.ActionListener;
 
 import java.sql.*;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Cadastro extends JFrame {
     private JTextField nomeField, telefoneField, emailField, cidadeField, enderecoField, senhaField, confirmaSenhaField;
     private JComboBox<String> estadoBox;
@@ -85,9 +88,19 @@ public class Cadastro extends JFrame {
                     return;
                 }
 
-                // Validação do formato do telefone
-                if (!telefone.matches("^\\d{2} \\d{8,9}$")) {
-                    JOptionPane.showMessageDialog(null, "Por favor, insira o telefone no formato DD 999999999.");
+                // Validação de email
+                Pattern patternEmail = Pattern.compile("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)*(\\.[a-zA-Z]{2,})$");
+                Matcher matcherEmail = patternEmail.matcher(email);
+                if (!matcherEmail.find()) {
+                    JOptionPane.showMessageDialog(null, "Email inválido");
+                    return;
+                }
+
+                // Validação de telefone
+                Pattern patternTelefone = Pattern.compile("^\\d{2} \\d{8,9}$");
+                Matcher matcherTelefone = patternTelefone.matcher(telefone);
+                if (!matcherTelefone.find()) {
+                    JOptionPane.showMessageDialog(null, "Telefone inválido, digite no formato 'DD + número' ");
                     return;
                 }
 
@@ -100,6 +113,30 @@ public class Cadastro extends JFrame {
                 // Conexão com o banco de dados e inserção dos dados
                 try {
                     Connection con = DataBaseConnection.getConnection();
+
+                    // Verificar se o email já existe
+                    PreparedStatement checkEmailStmt = con.prepareStatement("SELECT * FROM clientes WHERE email = ?");
+                    checkEmailStmt.setString(1, email);
+                    ResultSet checkEmailRs = checkEmailStmt.executeQuery();
+                    if (checkEmailRs.next()) {
+                        JOptionPane.showMessageDialog(null, "Este email já está sendo usado por outro cliente.");
+                        return;
+                    }
+                    checkEmailRs.close();
+                    checkEmailStmt.close();
+
+                    // Verificar se o telefone já existe
+                    PreparedStatement checkTelefoneStmt =
+                        con.prepareStatement("SELECT * FROM clientes WHERE telefone = ?");
+                    checkTelefoneStmt.setString(1, telefone);
+                    ResultSet checkTelefoneRs = checkTelefoneStmt.executeQuery();
+                    if (checkTelefoneRs.next()) {
+                        JOptionPane.showMessageDialog(null, "Este telefone já está sendo usado por outro cliente.");
+                        return;
+                    }
+                    checkTelefoneRs.close();
+                    checkTelefoneStmt.close();
+
                     PreparedStatement ps =
                         con.prepareStatement("INSERT INTO clientes (nome, telefone, email, cidade, estado, endereco, senha, admin, ativo) VALUES (?, ?, ?, ?, ?, ?, ?, 0, 1)");
                     ps.setString(1, nome);
@@ -110,12 +147,12 @@ public class Cadastro extends JFrame {
                     ps.setString(6, endereco);
                     ps.setString(7, senha);
                     ps.executeUpdate();
+
                     JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
 
                     // Redireciona para a tela de login
                     new Login().setVisible(true);
                     dispose();
-
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }

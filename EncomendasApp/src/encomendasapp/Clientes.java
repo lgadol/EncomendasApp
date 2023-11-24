@@ -19,6 +19,9 @@ import java.util.logging.Logger;
 
 import javax.swing.table.DefaultTableModel;
 
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 public class Clientes extends JFrame implements AtualizarTabela {
     private JTable dataTable;
     private JButton addButton;
@@ -226,14 +229,14 @@ public class Clientes extends JFrame implements AtualizarTabela {
             campoEmail = new JTextField();
             campoCidade = new JTextField();
             campoEstado = new JComboBox<>(new String[] {
-                                                 "", "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT",
-                                                 "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR",
-                                                 "SC", "SP", "SE", "TO"
+                                          "", "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS",
+                                          "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP",
+                                          "SE", "TO"
                 });
             campoEndereco = new JTextField();
 
             // Crie um painel e adicione os campos a ele
-            JPanel panel = new JPanel(new GridLayout(10, 2));
+            JPanel panel = new JPanel(new GridLayout(9, 2));
             panel.add(new JLabel("Admin"));
             panel.add(campoAdmin);
             panel.add(new JLabel("Ativo"));
@@ -277,8 +280,8 @@ public class Clientes extends JFrame implements AtualizarTabela {
                 ResultSet rs = pstmt.executeQuery();
 
                 if (rs.next()) {
-                    campoAdmin.setSelectedItem(rs.getString("admin"));
-                    campoAtivo.setSelectedItem(rs.getString("ativo"));
+                    campoAdmin.setSelectedItem(rs.getInt("admin") == 1 ? "SIM" : "NÃO");
+                    campoAtivo.setSelectedItem(rs.getInt("ativo") == 1 ? "SIM" : "NÃO");
                     campoNome.setText(rs.getString("nome"));
                     campoTelefone.setText(rs.getString("telefone"));
                     campoEmail.setText(rs.getString("email"));
@@ -301,37 +304,81 @@ public class Clientes extends JFrame implements AtualizarTabela {
         }
 
         private void salvarDadosPedido() {
-            LOGGER.info("Iniciando salvarDadosCliente...");
+            LOGGER.info("Conexão estabelecida.");
+
+            Pattern patternEmail = Pattern.compile("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)*(\\.[a-zA-Z]{2,})$");
+            Matcher matcherEmail = patternEmail.matcher(campoEmail.getText());
+            if (!matcherEmail.find()) {
+                JOptionPane.showMessageDialog(null, "Email inválido");
+                return;
+            }
+
+            // Validação de telefone
+            Pattern patternTelefone = Pattern.compile("^\\d{2} \\d{8,9}$");
+            Matcher matcherTelefone = patternTelefone.matcher(campoTelefone.getText());
+            if (!matcherTelefone.find()) {
+                JOptionPane.showMessageDialog(null, "Telefone inválido");
+                return;
+            }
+
             try {
                 LOGGER.info("Conectando ao banco de dados...");
                 Connection conn = DataBaseConnection.getConnection();
                 LOGGER.info("Conexão estabelecida.");
+
+                // Verificar se o email já existe
+                PreparedStatement checkStmt =
+                    conn.prepareStatement("SELECT * FROM clientes WHERE email = ? AND id != ?");
+                checkStmt.setString(1, campoEmail.getText());
+                checkStmt.setInt(2, clienteID);
+                ResultSet checkRs = checkStmt.executeQuery();
+                if (checkRs.next()) {
+                    JOptionPane.showMessageDialog(null, "Este email já está sendo usado por outro cliente.");
+                    return;
+                }
+                checkRs.close();
+                checkStmt.close();
+
+                // Verificar se o telefone já existe
+                PreparedStatement checkTelefoneStmt =
+                    conn.prepareStatement("SELECT * FROM clientes WHERE telefone = ? AND id != ?");
+                checkTelefoneStmt.setString(1, campoTelefone.getText());
+                checkTelefoneStmt.setInt(2, clienteID);
+                ResultSet checkTelefoneRs = checkTelefoneStmt.executeQuery();
+                if (checkTelefoneRs.next()) {
+                    JOptionPane.showMessageDialog(null, "Este telefone já está sendo usado por outro cliente.");
+                    return;
+                }
+                checkTelefoneRs.close();
+                checkTelefoneStmt.close();
 
                 String sql =
                     "UPDATE clientes SET admin = ?, ativo = ?, nome = ?, telefone = ?, email = ?, " +
                     "cidade = ?, estado = ?, endereco = ? WHERE id = ?";
 
                 PreparedStatement pstmt = conn.prepareStatement(sql);
+
                 pstmt.setInt(1, "SIM".equals(campoAdmin.getSelectedItem()) ? 1 : 0);
                 pstmt.setInt(2, "SIM".equals(campoAtivo.getSelectedItem()) ? 1 : 0);
                 pstmt.setString(3, campoNome.getText().toUpperCase());
                 pstmt.setString(4, campoTelefone.getText().toUpperCase());
-                pstmt.setString(5, campoEmail.getText().toUpperCase());
+                pstmt.setString(5, campoEmail.getText());
                 pstmt.setString(6, campoCidade.getText().toUpperCase());
-                pstmt.setString(7,(String) campoEstado.getSelectedItem()); 
+                pstmt.setString(7, (String) campoEstado.getSelectedItem());
                 pstmt.setString(8, campoEndereco.getText().toUpperCase());
                 pstmt.setInt(9, clienteID);
 
                 LOGGER.info("Executando a atualização...");
                 pstmt.executeUpdate();
                 LOGGER.info("Atualização executada.");
-                pstmt.close();
 
+                pstmt.close();
                 conn.close();
             } catch (SQLException ex) {
                 LOGGER.severe("Uma exceção SQLException foi lançada.");
                 ex.printStackTrace();
             }
+
             LOGGER.info("Finalizando salvarDadosPedido.");
 
             // Feche a janela de edição
@@ -340,6 +387,7 @@ public class Clientes extends JFrame implements AtualizarTabela {
             // Atualize a lista
             atualizarDadosTabela();
         }
+
     }
 
     @Override

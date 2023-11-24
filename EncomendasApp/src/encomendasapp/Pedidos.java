@@ -280,8 +280,8 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                     campoCategoria.setSelectedItem(rs.getString("categoria"));
                     campoTipoCarne.setText(rs.getString("tipo_carne"));
                     campoTipoCorte.setText(rs.getString("tipo_corte"));
-                    campoPago.setSelectedItem(rs.getString("pago"));
-                    campoPagamentoAdiantado.setSelectedItem(rs.getString("pagamento_adiantado"));
+                    campoPago.setSelectedItem(rs.getInt("pago") == 1 ? "SIM" : "NÃO");
+                    campoPagamentoAdiantado.setSelectedItem(rs.getInt("pagamento_adiantado") == 1 ? "SIM" : "NÃO");
                     campoTipoPagamento.setSelectedItem(rs.getString("tipo_pagamento"));
                     campoPrecoPago.setText(rs.getString("preco_pago"));
                     campoKgs.setText(rs.getString("kgs"));
