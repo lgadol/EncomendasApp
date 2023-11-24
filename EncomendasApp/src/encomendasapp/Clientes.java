@@ -8,9 +8,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 
+import java.awt.event.MouseEvent;
+
+import java.math.BigDecimal;
+
 import java.sql.*;
 
 import java.util.Vector;
+import java.util.logging.Logger;
+
+import javax.swing.table.DefaultTableModel;
 
 public class Clientes extends JFrame implements AtualizarTabela {
     private JTable dataTable;
@@ -32,9 +39,6 @@ public class Clientes extends JFrame implements AtualizarTabela {
         columnNames.add("Cidade");
         columnNames.add("Estado");
         columnNames.add("Endereco");
-        columnNames.add("R. Senha");
-        columnNames.add("Editar");
-        columnNames.add("Salvar");
 
         // Botão Adicionar Clientes
         addButton = new JButton("Adicionar Cliente");
@@ -64,10 +68,6 @@ public class Clientes extends JFrame implements AtualizarTabela {
 
         final CustomTableModel tableModel = new CustomTableModel(data, columnNames);
         dataTable = new JTable(tableModel);
-
-        dataTable.getColumn("Editar").setCellRenderer(new IconRenderer("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\editar.png"));
-        dataTable.getColumn("R. Senha").setCellRenderer(new IconRenderer("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\reiniciar.png"));
-        dataTable.getColumn("Salvar").setCellRenderer(new IconRenderer("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\salvar.png"));
 
         dataTable.addMouseListener(new JTableButtonMouseListener(dataTable));
 
@@ -106,18 +106,89 @@ public class Clientes extends JFrame implements AtualizarTabela {
                             PreparedStatement deleteStmt = conn.prepareStatement("DELETE FROM clientes");
                             deleteStmt.executeUpdate();
                             deleteStmt.close();
-
-                            // Atualiza a tabela
-                            atualizarDadosTabela();
                         }
                     }
 
                     conn.close();
+                    atualizarDadosTabela();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
             }
         });
+
+        // Inicialize dataTable antes de adicionar o MouseListener
+        dataTable = new JTable(new DefaultTableModel());
+
+        final int[] selectedRow = new int[1];
+        dataTable.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent mouseEvent) {
+                JTable table = (JTable) mouseEvent.getSource();
+                Point point = mouseEvent.getPoint();
+                selectedRow[0] = table.rowAtPoint(point);
+                if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
+                    // Obtenha o ID do pedido na linha selecionada. Supondo que o ID seja a primeira coluna da tabela.
+                    int clienteID = ((BigDecimal) dataTable.getValueAt(selectedRow[0], 0)).intValue();
+
+                    // Abra a janela de edição passando o ID do pedido
+                    new EditarCliente(clienteID).setVisible(true);
+                }
+                if (mouseEvent.getButton() == MouseEvent.BUTTON3) {
+                    // Verifica se o botão direito do mouse foi pressionado
+                    JPopupMenu popupMenu = new JPopupMenu();
+                    JMenuItem menuItemEdit = new JMenuItem("Editar");
+                    JMenuItem menuItemDelete = new JMenuItem("Excluir");
+                    menuItemEdit.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            // Obtenha o ID do pedido na linha selecionada. Supondo que o ID seja a primeira coluna da tabela.
+                            int clienteID = ((BigDecimal) dataTable.getValueAt(selectedRow[0], 0)).intValue();
+
+                            // Abra a janela de edição passando o ID do pedido
+                            new EditarCliente(clienteID).setVisible(true);
+                        }
+                    });
+                    menuItemDelete.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            // Obtenha o ID do pedido na linha selecionada. Supondo que o ID seja a primeira coluna da tabela.
+                            int clienteID = ((BigDecimal) dataTable.getValueAt(selectedRow[0], 0)).intValue();
+
+                            try {
+                                // Conecta ao banco de dados
+                                Connection conn = DataBaseConnection.getConnection();
+
+                                // Cria a query SQL para excluir o pedido com o ID especificado
+                                String sql = "DELETE FROM clientes WHERE Id = ?";
+
+                                // Cria um PreparedStatement para executar a query SQL
+                                PreparedStatement pstmt = conn.prepareStatement(sql);
+
+                                // Define o valor do parâmetro na query SQL
+                                pstmt.setInt(1, clienteID);
+
+                                // Executa a query SQL
+                                pstmt.executeUpdate();
+
+                                // Fecha o PreparedStatement e a conexão
+                                pstmt.close();
+                                conn.close();
+
+                                // Atualiza a tabela após a exclusão
+                                atualizarDadosTabela();
+                            } catch (SQLException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    });
+                    popupMenu.add(menuItemEdit);
+                    popupMenu.add(menuItemDelete);
+                    popupMenu.show(table, mouseEvent.getX(), mouseEvent.getY());
+                }
+            }
+        });
+
+        add(new JScrollPane(dataTable), BorderLayout.CENTER);
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(500, 400);
@@ -125,7 +196,150 @@ public class Clientes extends JFrame implements AtualizarTabela {
         setLocationRelativeTo(null);
         setVisible(true);
 
+        // Chame o método para preencher a tabela quando a janela for aberta
         atualizarDadosTabela();
+    }
+
+    private static final Logger LOGGER = Logger.getLogger(EditarCliente.class.getName());
+
+    public class EditarCliente extends JFrame {
+        private int clienteID;
+
+        private JComboBox<String> campoAdmin;
+        private JComboBox<String> campoAtivo;
+        private JTextField campoNome;
+        private JTextField campoTelefone;
+        private JTextField campoEmail;
+        private JTextField campoCidade;
+        private JComboBox<String> campoEstado;
+        private JTextField campoEndereco;
+
+        private JButton botaoSalvar;
+
+        public EditarCliente(int clienteID) {
+            this.clienteID = clienteID;
+
+            campoAdmin = new JComboBox<>(new String[] { "SIM", "NÃO" });
+            campoAtivo = new JComboBox<>(new String[] { "SIM", "NÃO" });
+            campoNome = new JTextField();
+            campoTelefone = new JTextField();
+            campoEmail = new JTextField();
+            campoCidade = new JTextField();
+            campoEstado = new JComboBox<>(new String[] {
+                                                 "", "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT",
+                                                 "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR",
+                                                 "SC", "SP", "SE", "TO"
+                });
+            campoEndereco = new JTextField();
+
+            // Crie um painel e adicione os campos a ele
+            JPanel panel = new JPanel(new GridLayout(10, 2));
+            panel.add(new JLabel("Admin"));
+            panel.add(campoAdmin);
+            panel.add(new JLabel("Ativo"));
+            panel.add(campoAtivo);
+            panel.add(new JLabel("Nome"));
+            panel.add(campoNome);
+            panel.add(new JLabel("Telefone"));
+            panel.add(campoTelefone);
+            panel.add(new JLabel("E-mail"));
+            panel.add(campoEmail);
+            panel.add(new JLabel("Cidade"));
+            panel.add(campoCidade);
+            panel.add(new JLabel("Estado"));
+            panel.add(campoEstado);
+            panel.add(new JLabel("Endereço"));
+            panel.add(campoEndereco);
+
+            // Inicialize e adicione o botão Salvar
+            botaoSalvar = new JButton("Salvar");
+            panel.add(botaoSalvar);
+
+            botaoSalvar.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    salvarDadosPedido();
+                }
+            });
+
+            // Adicione o painel ao JFrame
+            add(panel);
+
+            // Depois de adicionar os componentes, preencha-os com os dados do pedido
+            preencherDadosCliente();
+        }
+
+        private void preencherDadosCliente() {
+            try {
+                Connection conn = DataBaseConnection.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM clientes WHERE id = ?");
+                pstmt.setInt(1, clienteID);
+                ResultSet rs = pstmt.executeQuery();
+
+                if (rs.next()) {
+                    campoAdmin.setSelectedItem(rs.getString("admin"));
+                    campoAtivo.setSelectedItem(rs.getString("ativo"));
+                    campoNome.setText(rs.getString("nome"));
+                    campoTelefone.setText(rs.getString("telefone"));
+                    campoEmail.setText(rs.getString("email"));
+                    campoCidade.setText(rs.getString("cidade"));
+                    campoEstado.setSelectedItem(rs.getString("estado"));
+                    campoEndereco.setText(rs.getString("endereco"));
+                }
+
+                rs.close();
+                pstmt.close();
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setSize(500, 400);
+            setLocationRelativeTo(null);
+            setVisible(true);
+        }
+
+        private void salvarDadosPedido() {
+            LOGGER.info("Iniciando salvarDadosCliente...");
+            try {
+                LOGGER.info("Conectando ao banco de dados...");
+                Connection conn = DataBaseConnection.getConnection();
+                LOGGER.info("Conexão estabelecida.");
+
+                String sql =
+                    "UPDATE clientes SET admin = ?, ativo = ?, nome = ?, telefone = ?, email = ?, " +
+                    "cidade = ?, estado = ?, endereco = ? WHERE id = ?";
+
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                pstmt.setInt(1, "SIM".equals(campoAdmin.getSelectedItem()) ? 1 : 0);
+                pstmt.setInt(2, "SIM".equals(campoAtivo.getSelectedItem()) ? 1 : 0);
+                pstmt.setString(3, campoNome.getText().toUpperCase());
+                pstmt.setString(4, campoTelefone.getText().toUpperCase());
+                pstmt.setString(5, campoEmail.getText().toUpperCase());
+                pstmt.setString(6, campoCidade.getText().toUpperCase());
+                pstmt.setString(7,(String) campoEstado.getSelectedItem()); 
+                pstmt.setString(8, campoEndereco.getText().toUpperCase());
+                pstmt.setInt(9, clienteID);
+
+                LOGGER.info("Executando a atualização...");
+                pstmt.executeUpdate();
+                LOGGER.info("Atualização executada.");
+                pstmt.close();
+
+                conn.close();
+            } catch (SQLException ex) {
+                LOGGER.severe("Uma exceção SQLException foi lançada.");
+                ex.printStackTrace();
+            }
+            LOGGER.info("Finalizando salvarDadosPedido.");
+
+            // Feche a janela de edição
+            dispose();
+
+            // Atualize a lista
+            atualizarDadosTabela();
+        }
     }
 
     @Override

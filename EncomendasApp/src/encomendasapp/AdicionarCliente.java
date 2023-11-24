@@ -18,14 +18,14 @@ public class AdicionarCliente extends JFrame {
     private JButton salvarButton;
     private AtualizarTabela atualizarTabela;
     String[] estados = {
-        "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI",
+        "", "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI",
         "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"
     };
     JComboBox estadoBox = new JComboBox(estados);
 
     public AdicionarCliente(final AtualizarTabela atualizarTabela) {
         this.atualizarTabela = atualizarTabela;
-        
+
         setLayout(new GridLayout(0, 2));
         adminCheck = new JCheckBox("Admin");
         ativoCheck = new JCheckBox("Ativo");
@@ -88,7 +88,7 @@ public class AdicionarCliente extends JFrame {
                         conn.close();
 
                         JOptionPane.showMessageDialog(null, "Cliente adicionado com sucesso!");
-                        
+
                         atualizarTabela.atualizarDadosTabela();
                     } catch (SQLException ex) {
                         ex.printStackTrace();
