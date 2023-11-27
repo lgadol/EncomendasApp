@@ -22,7 +22,7 @@ public class Cadastro extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        JPanel formPanel = new JPanel(new GridLayout(9, 2));
+        JPanel formPanel = new JPanel(new GridLayout(8, 2));
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
 
         // Inicializando os campos
