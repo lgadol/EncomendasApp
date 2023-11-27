@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 
 import java.sql.*;
 
-public class AdicionarPedido extends JFrame {
+public class AdicionarPedido extends JDialog {
 
     private JTextField nomeClienteField, tipoCarneField, tipoCorteField, precoPagoField, kgsField;
     private JComboBox<String> categoriaBox, tipoPagamentoBox;
@@ -21,6 +21,7 @@ public class AdicionarPedido extends JFrame {
     private final AtualizarTabela pedidosWindow;
 
     public AdicionarPedido(final int admin, final String nomeUsuarioLogado, final AtualizarTabela pedidosWindow) {
+        super((Frame) null, "Adicionar Pedido", true);
         this.admin = admin;
         this.nomeUsuarioLogado = nomeUsuarioLogado;
         this.pedidosWindow = pedidosWindow;
@@ -60,7 +61,7 @@ public class AdicionarPedido extends JFrame {
         add(pagamentoAdiantadoBox);
         add(new JLabel("Tipo de Pagamento:"));
         add(tipoPagamentoBox);
-        add(new JLabel("Preço Pago:"));
+        add(new JLabel("Pre�o Pago:"));
         add(precoPagoField);
         add(new JLabel("Kgs:"));
         add(kgsField);
@@ -70,19 +71,19 @@ public class AdicionarPedido extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String nomeCliente = nomeClienteField.getText();
-                String categoria = (String) categoriaBox.getSelectedItem();
+                String categoria = (String)categoriaBox.getSelectedItem();
                 String tipoCarne = tipoCarneField.getText().toUpperCase();
                 String tipoCorte = tipoCorteField.getText();
                 boolean pago = pagoBox.isSelected();
                 boolean pagamentoAdiantado = pagamentoAdiantadoBox.isSelected();
-                String tipoPagamento = (String) tipoPagamentoBox.getSelectedItem();
+                String tipoPagamento = (String)tipoPagamentoBox.getSelectedItem();
                 String precoPago = precoPagoField.getText();
                 String kgs = kgsField.getText();
 
                 // Validação dos campos obrigatórios
                 if (nomeCliente.isEmpty() || categoria.isEmpty() || tipoCarne.isEmpty() || tipoPagamento.isEmpty() ||
                     kgs.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos obrigatórios.");
+                    JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos obrigat�rios.");
                     return;
                 }
 
@@ -95,7 +96,7 @@ public class AdicionarPedido extends JFrame {
                 // Validação do preço
                 if (admin == 1) {
                     if (!precoPago.matches("^\\d{1,3}(\\,\\d{1,2})?$")) {
-                        JOptionPane.showMessageDialog(null, "Por favor, insira o preço no formato 999,99.");
+                        JOptionPane.showMessageDialog(null, "Por favor, insira o pre�o no formato 999,99.");
                         return;
                     }
                 }

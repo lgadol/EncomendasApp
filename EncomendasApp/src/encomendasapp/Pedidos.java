@@ -40,9 +40,9 @@ public class Pedidos extends JFrame implements AtualizarTabela {
         columnNames.add("Pago");
         columnNames.add("Pagamento Adiantado");
         columnNames.add("Tipo de Pagamento");
-        columnNames.add("Pre√ßo Pago");
+        columnNames.add("PreÁo Pago");
         columnNames.add("Quilos");
-        columnNames.add("Pre√ßo por Kg");
+        columnNames.add("PreÁo por Kg");
         columnNames.add("Data da Encomenda");
 
         // Bot√£o Adicionar Pedidos
@@ -68,12 +68,18 @@ public class Pedidos extends JFrame implements AtualizarTabela {
         buttonPanel.add(addButton);
         buttonPanel.add(clearButton);
         add(buttonPanel, BorderLayout.SOUTH);
-
+        
+        // Remova todos os ouvintes de aÁ„o existentes
+        for (ActionListener al : addButton.getActionListeners()) {
+            addButton.removeActionListener(al);
+        }
+        
+        AdicionarPedido adicionarPedidoWindow = null;
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new AdicionarPedido(admin, nomeUsuarioLogado, Pedidos.this).setVisible(true);
-                // Atualiza a tabela ap√≥s adicionar o pedido
+                // Atualiza a tabela apÛs adicionar o pedido
                 atualizarDadosTabela();
             }
         });
@@ -93,12 +99,12 @@ public class Pedidos extends JFrame implements AtualizarTabela {
 
                     if (count == 0) {
                         // Se n√£o houver registros, mostra uma mensagem
-                        JOptionPane.showMessageDialog(null, "N√£o h√° nenhum pedido para excluir");
+                        JOptionPane.showMessageDialog(null, "N„o h· nenhum pedido para excluir");
                     } else {
-                        // Se houver registros, mostra um di√°logo de confirma√ß√£o
+                        // Se houver registros, mostra um di·logo de confirma√ß√£o
                         int confirm =
                             JOptionPane.showConfirmDialog(null, "Tem certeza de que deseja excluir todos os pedidos?",
-                                                          "Confirma√ß√£o", JOptionPane.YES_NO_OPTION);
+                                                          "ConfirmaÁ„o", JOptionPane.YES_NO_OPTION);
                         if (confirm == JOptionPane.YES_OPTION) {
                             // Exclui todos os registros
                             PreparedStatement deleteStmt = conn.prepareStatement("DELETE FROM pedidos");
@@ -108,7 +114,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                     }
 
                     conn.close();
-                    // Atualiza a tabela ap√≥s todas as exclus√µes terem sido conclu√≠das
+                    // Atualiza a tabela apÛs todas as exclusıes terem sido concluÌdas
                     atualizarDadosTabela();
                 } catch (SQLException ex) {
                     ex.printStackTrace();

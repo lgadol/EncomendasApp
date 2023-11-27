@@ -6,6 +6,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.awt.event.WindowAdapter;
+
+import java.awt.event.WindowEvent;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,13 +22,19 @@ public class AdicionarCliente extends JFrame {
     private JCheckBox adminCheck, ativoCheck;
     private JButton salvarButton;
     private AtualizarTabela atualizarTabela;
-    String[] estados = {
-        "", "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI",
-        "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"
-    };
+    private static boolean isOpen = false;
+
+    String[] estados =
+    { "", "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI",
+      "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" };
     JComboBox estadoBox = new JComboBox(estados);
 
     public AdicionarCliente(final AtualizarTabela atualizarTabela) {
+        if (isOpen) {
+            return;
+        }
+        isOpen = true;
+
         this.atualizarTabela = atualizarTabela;
 
         setLayout(new GridLayout(0, 2));
@@ -90,7 +100,8 @@ public class AdicionarCliente extends JFrame {
                         checkTelefoneStmt.setString(1, telefoneField.getText());
                         ResultSet checkTelefoneRs = checkTelefoneStmt.executeQuery();
                         if (checkTelefoneRs.next()) {
-                            JOptionPane.showMessageDialog(null, "Este telefone já está sendo usado por outro cliente.");
+                            JOptionPane.showMessageDialog(null,
+                                                          "Este telefone já está sendo usado por outro cliente.");
                             return;
                         }
                         checkTelefoneRs.close();
@@ -120,6 +131,13 @@ public class AdicionarCliente extends JFrame {
                         ex.printStackTrace();
                     }
                 }
+            }
+        });
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                isOpen = false;
             }
         });
 
