@@ -45,7 +45,8 @@ public class AdicionarCliente extends JFrame {
         emailField = new JTextField();
         cidadeField = new JTextField();
         enderecoField = new JTextField();
-        salvarButton = new JButton("Salvar");
+        salvarButton = new JButton("Confirmar");
+        salvarButton.setBackground(new Color(0, 204, 51)); // Muda a cor do bot„o para azul
 
         add(new JLabel("Admin:"));
         add(adminCheck);
@@ -77,31 +78,31 @@ public class AdicionarCliente extends JFrame {
                                                   "Por favor, insira o telefone no formato 'DD 12345678' ou 'DD 123456789'!");
                 } else if (!Pattern.matches("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)*(\\.[a-zA-Z]{2,})$",
                                             emailField.getText())) {
-                    JOptionPane.showMessageDialog(null, "Por favor, insira um e-mail v√°lido!");
+                    JOptionPane.showMessageDialog(null, "Por favor, insira um e-mail v·lido!");
                 } else {
                     try {
                         Connection conn = DataBaseConnection.getConnection();
 
-                        // Verificar se o email j√° existe
+                        // Verificar se o email j· existe
                         PreparedStatement checkEmailStmt =
                             conn.prepareStatement("SELECT * FROM clientes WHERE email = ?");
                         checkEmailStmt.setString(1, emailField.getText());
                         ResultSet checkEmailRs = checkEmailStmt.executeQuery();
                         if (checkEmailRs.next()) {
-                            JOptionPane.showMessageDialog(null, "Este email j√° est√° sendo usado por outro cliente.");
+                            JOptionPane.showMessageDialog(null, "Este email j· est· sendo usado por outro cliente.");
                             return;
                         }
                         checkEmailRs.close();
                         checkEmailStmt.close();
 
-                        // Verificar se o telefone j√° existe
+                        // Verificar se o telefone j· existe
                         PreparedStatement checkTelefoneStmt =
                             conn.prepareStatement("SELECT * FROM clientes WHERE telefone = ?");
                         checkTelefoneStmt.setString(1, telefoneField.getText());
                         ResultSet checkTelefoneRs = checkTelefoneStmt.executeQuery();
                         if (checkTelefoneRs.next()) {
                             JOptionPane.showMessageDialog(null,
-                                                          "Este telefone j√° est√° sendo usado por outro cliente.");
+                                                          "Este telefone j· est· sendo usado por outro cliente.");
                             return;
                         }
                         checkTelefoneRs.close();

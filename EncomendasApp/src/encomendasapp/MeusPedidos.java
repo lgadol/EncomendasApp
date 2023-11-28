@@ -33,9 +33,9 @@ public class MeusPedidos extends JFrame implements AtualizarTabela {
         columnNames.add("Pago");
         columnNames.add("Pagamento Adiantado");
         columnNames.add("Tipo de Pagamento");
-        columnNames.add("Pre√ßo Pago");
+        columnNames.add("PreÁo Pago");
         columnNames.add("Quilos");
-        columnNames.add("Pre√ßo por Kg");
+        columnNames.add("PreÁo por Kg");
         columnNames.add("Data da Encomenda");
 
         // Inicialize dataTable antes de chamar atualizarDadosTabela()
@@ -66,10 +66,18 @@ public class MeusPedidos extends JFrame implements AtualizarTabela {
         buttonPanel.add(clearButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
+        final AdicionarPedido[] adicionarPedidoWindow = new AdicionarPedido[1];
+
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new AdicionarPedido(admin, nomeUsuarioLogado, MeusPedidos.this).setVisible(true);
+                if (adicionarPedidoWindow[0] == null || !adicionarPedidoWindow[0].isVisible()) {
+                    adicionarPedidoWindow[0] = new AdicionarPedido(admin, nomeUsuarioLogado, MeusPedidos.this);
+                    adicionarPedidoWindow[0].setVisible(true);
+                } else {
+                    adicionarPedidoWindow[0].toFront();
+                    adicionarPedidoWindow[0].repaint();
+                }
             }
         });
 
@@ -90,18 +98,16 @@ public class MeusPedidos extends JFrame implements AtualizarTabela {
 
                     if (count == 0) {
                         // Se n√£o houver registros, mostra uma mensagem
-                        JOptionPane.showMessageDialog(null, "N√£o h√° nenhum pedido seu,  para excluir");
+                        JOptionPane.showMessageDialog(null, "N„o h· nenhum pedido seu,  para excluir");
                     } else {
-                        // Se houver registros, mostra um di√°logo de confirma√ß√£o
+                        // Se houver registros, mostra um di·logo de confirmaÁ„o
                         int confirm =
-                            JOptionPane.showConfirmDialog(null,
-                                                          "Tem certeza de que deseja excluir todos os seus pedidos?",
-                                                          "Confirma√ß√£o", JOptionPane.YES_NO_OPTION);
-                        if (confirm ==
-                            JOptionPane.YES_OPTION) {
+                            JOptionPane.showConfirmDialog(null, "Tem certeza de que deseja excluir todos os seus pedidos?",
+                                                          "ConfirmaÁ„o", JOptionPane.YES_NO_OPTION);
+                        if (confirm == JOptionPane.YES_OPTION) {
                             // Exclui todos os registros
                             PreparedStatement deleteStmt =
-                     conn.prepareStatement("DELETE FROM pedidos WHERE nome_cliente = ?");
+                                conn.prepareStatement("DELETE FROM pedidos WHERE nome_cliente = ?");
                             deleteStmt.setString(1, nomeUsuarioLogado);
                             deleteStmt.executeUpdate();
                             deleteStmt.close();
@@ -124,11 +130,12 @@ public class MeusPedidos extends JFrame implements AtualizarTabela {
         setLocationRelativeTo(null);
         setVisible(true);
 
-        // Chame o m√©todo para preencher a tabela quando a janela for aberta
+        // Chame o mÈtodo para preencher a tabela quando a janela for aberta
         atualizarDadosTabela();
     }
 
-    // M√©todo para atualizar os dados da tabela
+    // MÈtodo para atualizar os dados da tabela
+
     public void atualizarDadosTabela() {
         Vector<Vector<Object>> data = new Vector<>();
         try {
@@ -152,7 +159,7 @@ public class MeusPedidos extends JFrame implements AtualizarTabela {
         }
 
         // Atualiza os dados da tabela
-        DefaultTableModel model = (DefaultTableModel) dataTable.getModel();
+        DefaultTableModel model = (DefaultTableModel)dataTable.getModel();
         model.setDataVector(data, columnNames);
     }
 }

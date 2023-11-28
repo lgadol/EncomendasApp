@@ -59,7 +59,7 @@ public class Clientes extends JFrame implements AtualizarTabela {
         clearButton.setBackground(new Color(255, 51, 0));
         clearIcon = new ImageIcon(clearImage);
 
-        // Adicionando os bot√µes
+        // Adicionando os botıes
         addButton.setIcon(addIcon);
         clearButton.setIcon(clearIcon);
 
@@ -98,12 +98,12 @@ public class Clientes extends JFrame implements AtualizarTabela {
 
                     if (count == 0) {
                         // Se n√£o houver registros, mostra uma mensagem
-                        JOptionPane.showMessageDialog(null, "N√£o h√° nenhum cliente para excluir");
+                        JOptionPane.showMessageDialog(null, "N„o h· nenhum cliente para excluir");
                     } else {
-                        // Se houver registros, mostra um di√°logo de confirma√ß√£o
+                        // Se houver registros, mostra um di·logo de confirmaÁ„o
                         int confirm =
                             JOptionPane.showConfirmDialog(null, "Tem certeza de que deseja excluir todos os registros?",
-                                                          "Confirma√ß√£o", JOptionPane.YES_NO_OPTION);
+                                                          "ConfirmaÁ„o", JOptionPane.YES_NO_OPTION);
                         if (confirm == JOptionPane.YES_OPTION) {
                             // Exclui todos os registros
                             PreparedStatement deleteStmt = conn.prepareStatement("DELETE FROM clientes");
@@ -222,8 +222,8 @@ public class Clientes extends JFrame implements AtualizarTabela {
         public EditarCliente(int clienteID) {
             this.clienteID = clienteID;
 
-            campoAdmin = new JComboBox<>(new String[] { "SIM", "N√ÉO" });
-            campoAtivo = new JComboBox<>(new String[] { "SIM", "N√ÉO" });
+            campoAdmin = new JComboBox<>(new String[] { "SIM", "N√O" });
+            campoAtivo = new JComboBox<>(new String[] { "SIM", "N√O" });
             campoNome = new JTextField();
             campoTelefone = new JTextField();
             campoEmail = new JTextField();
@@ -254,9 +254,9 @@ public class Clientes extends JFrame implements AtualizarTabela {
             panel.add(new JLabel("Endere√ßo"));
             panel.add(campoEndereco);
 
-            // Inicialize e adicione o bot√£o Salvar
+            // Inicialize e adicione o bot„o Salvar
             botaoSalvar = new JButton("Salvar");
-            panel.add(botaoSalvar);
+            botaoSalvar.setBackground(new Color(0, 204, 51)); // Muda a cor do bot„o para azul
 
             botaoSalvar.addActionListener(new ActionListener() {
                 @Override
@@ -280,8 +280,8 @@ public class Clientes extends JFrame implements AtualizarTabela {
                 ResultSet rs = pstmt.executeQuery();
 
                 if (rs.next()) {
-                    campoAdmin.setSelectedItem(rs.getInt("admin") == 1 ? "SIM" : "N√ÉO");
-                    campoAtivo.setSelectedItem(rs.getInt("ativo") == 1 ? "SIM" : "N√ÉO");
+                    campoAdmin.setSelectedItem(rs.getInt("admin") == 1 ? "SIM" : "N√O");
+                    campoAtivo.setSelectedItem(rs.getInt("ativo") == 1 ? "SIM" : "N√O");
                     campoNome.setText(rs.getString("nome"));
                     campoTelefone.setText(rs.getString("telefone"));
                     campoEmail.setText(rs.getString("email"));
@@ -309,7 +309,7 @@ public class Clientes extends JFrame implements AtualizarTabela {
             Pattern patternEmail = Pattern.compile("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)*(\\.[a-zA-Z]{2,})$");
             Matcher matcherEmail = patternEmail.matcher(campoEmail.getText());
             if (!matcherEmail.find()) {
-                JOptionPane.showMessageDialog(null, "Email inv√°lido");
+                JOptionPane.showMessageDialog(null, "Email inv·lido");
                 return;
             }
 
@@ -317,7 +317,7 @@ public class Clientes extends JFrame implements AtualizarTabela {
             Pattern patternTelefone = Pattern.compile("^\\d{2} \\d{8,9}$");
             Matcher matcherTelefone = patternTelefone.matcher(campoTelefone.getText());
             if (!matcherTelefone.find()) {
-                JOptionPane.showMessageDialog(null, "Telefone inv√°lido");
+                JOptionPane.showMessageDialog(null, "Telefone inv·lido");
                 return;
             }
 
@@ -326,27 +326,27 @@ public class Clientes extends JFrame implements AtualizarTabela {
                 Connection conn = DataBaseConnection.getConnection();
                 LOGGER.info("Conex√£o estabelecida.");
 
-                // Verificar se o email j√° existe
+                // Verificar se o email j· existe
                 PreparedStatement checkStmt =
                     conn.prepareStatement("SELECT * FROM clientes WHERE email = ? AND id != ?");
                 checkStmt.setString(1, campoEmail.getText());
                 checkStmt.setInt(2, clienteID);
                 ResultSet checkRs = checkStmt.executeQuery();
                 if (checkRs.next()) {
-                    JOptionPane.showMessageDialog(null, "Este email j√° est√° sendo usado por outro cliente.");
+                    JOptionPane.showMessageDialog(null, "Este email j· est· sendo usado por outro cliente.");
                     return;
                 }
                 checkRs.close();
                 checkStmt.close();
 
-                // Verificar se o telefone j√° existe
+                // Verificar se o telefone j· existe
                 PreparedStatement checkTelefoneStmt =
                     conn.prepareStatement("SELECT * FROM clientes WHERE telefone = ? AND id != ?");
                 checkTelefoneStmt.setString(1, campoTelefone.getText());
                 checkTelefoneStmt.setInt(2, clienteID);
                 ResultSet checkTelefoneRs = checkTelefoneStmt.executeQuery();
                 if (checkTelefoneRs.next()) {
-                    JOptionPane.showMessageDialog(null, "Este telefone j√° est√° sendo usado por outro cliente.");
+                    JOptionPane.showMessageDialog(null, "Este telefone j· est· sendo usado por outro cliente.");
                     return;
                 }
                 checkTelefoneRs.close();
@@ -375,13 +375,13 @@ public class Clientes extends JFrame implements AtualizarTabela {
                 pstmt.close();
                 conn.close();
             } catch (SQLException ex) {
-                LOGGER.severe("Uma exce√ß√£o SQLException foi lan√ßada.");
+                LOGGER.severe("Uma exceÁ„o SQLException foi lanÁada.");
                 ex.printStackTrace();
             }
 
             LOGGER.info("Finalizando salvarDadosPedido.");
 
-            // Feche a janela de edi√ß√£o
+            // Feche a janela de ediÁ„o
             dispose();
 
             // Atualize a lista

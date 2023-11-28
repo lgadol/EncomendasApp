@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 
 import java.sql.*;
 
-public class AdicionarPedido extends JDialog {
+public class AdicionarPedido extends JFrame {
 
     private JTextField nomeClienteField, tipoCarneField, tipoCorteField, precoPagoField, kgsField;
     private JComboBox<String> categoriaBox, tipoPagamentoBox;
@@ -21,7 +21,6 @@ public class AdicionarPedido extends JDialog {
     private final AtualizarTabela pedidosWindow;
 
     public AdicionarPedido(final int admin, final String nomeUsuarioLogado, final AtualizarTabela pedidosWindow) {
-        super((Frame) null, "Adicionar Pedido", true);
         this.admin = admin;
         this.nomeUsuarioLogado = nomeUsuarioLogado;
         this.pedidosWindow = pedidosWindow;
@@ -38,6 +37,7 @@ public class AdicionarPedido extends JDialog {
         precoPagoField = new JTextField();
         kgsField = new JTextField();
         confirmarButton = new JButton("Confirmar");
+        confirmarButton.setBackground(new Color(0, 204, 51)); // Muda a cor do botão para azul
 
         // Habilita ou desabilita os campos com base no valor de admin
         nomeClienteField.setEnabled(admin == 1);
@@ -65,7 +65,13 @@ public class AdicionarPedido extends JDialog {
         add(precoPagoField);
         add(new JLabel("Kgs:"));
         add(kgsField);
-        add(confirmarButton);
+
+        // Crie um novo JPanel com BorderLayout
+        JPanel buttonPanel = new JPanel(new BorderLayout());
+        // Adicione o botão confirmarButton ao painel
+        buttonPanel.add(confirmarButton, BorderLayout.CENTER);
+        // Adicione o painel ao JFrame
+        add(buttonPanel);
 
         confirmarButton.addActionListener(new ActionListener() {
             @Override

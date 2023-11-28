@@ -55,11 +55,11 @@ public class Cadastro extends JFrame {
         formPanel.add(cidadeField);
         formPanel.add(new JLabel("Estado:"));
         formPanel.add(estadoBox);
-        formPanel.add(new JLabel("Endere√ßo:"));
+        formPanel.add(new JLabel("EndereÁo:"));
         formPanel.add(enderecoField);
         formPanel.add(new JLabel("Senha:"));
         formPanel.add(senhaField);
-        formPanel.add(new JLabel("Confirma√ß√£o de Senha:"));
+        formPanel.add(new JLabel("ConfirmaÁ„o de Senha:"));
         formPanel.add(confirmaSenhaField);
 
         // Adicionando os bot√µes ao painel de bot√µes
@@ -84,7 +84,7 @@ public class Cadastro extends JFrame {
 
                 // Valida√ß√£o dos campos obrigat√≥rios
                 if (nome.isEmpty() || telefone.isEmpty() || email.isEmpty() || senha.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos obrigat√≥rios.");
+                    JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos obrigatÛrios.");
                     return;
                 }
 
@@ -92,7 +92,7 @@ public class Cadastro extends JFrame {
                 Pattern patternEmail = Pattern.compile("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)*(\\.[a-zA-Z]{2,})$");
                 Matcher matcherEmail = patternEmail.matcher(email);
                 if (!matcherEmail.find()) {
-                    JOptionPane.showMessageDialog(null, "Email inv√°lido");
+                    JOptionPane.showMessageDialog(null, "Email inv·lido");
                     return;
                 }
 
@@ -100,17 +100,17 @@ public class Cadastro extends JFrame {
                 Pattern patternTelefone = Pattern.compile("^\\d{2} \\d{8,9}$");
                 Matcher matcherTelefone = patternTelefone.matcher(telefone);
                 if (!matcherTelefone.find()) {
-                    JOptionPane.showMessageDialog(null, "Telefone inv√°lido, digite no formato 'DD + n√∫mero' ");
+                    JOptionPane.showMessageDialog(null, "Telefone inv·lido, digite no formato 'DD + n˙mero' ");
                     return;
                 }
 
                 // Valida√ß√£o da senha
                 if (!senha.equals(confirmaSenha)) {
-                    JOptionPane.showMessageDialog(null, "As senhas n√£o coincidem.");
+                    JOptionPane.showMessageDialog(null, "As senhas n„o coincidem.");
                     return;
                 }
 
-                // Conex√£o com o banco de dados e inser√ß√£o dos dados
+                // Conex„o com o banco de dados e inserÁ„o dos dados
                 try {
                     Connection con = DataBaseConnection.getConnection();
 
@@ -119,19 +119,19 @@ public class Cadastro extends JFrame {
                     checkEmailStmt.setString(1, email);
                     ResultSet checkEmailRs = checkEmailStmt.executeQuery();
                     if (checkEmailRs.next()) {
-                        JOptionPane.showMessageDialog(null, "Este email j√° est√° sendo usado por outro cliente.");
+                        JOptionPane.showMessageDialog(null, "Este email j· est· sendo usado por outro cliente.");
                         return;
                     }
                     checkEmailRs.close();
                     checkEmailStmt.close();
 
-                    // Verificar se o telefone j√° existe
+                    // Verificar se o telefone j· existe
                     PreparedStatement checkTelefoneStmt =
                         con.prepareStatement("SELECT * FROM clientes WHERE telefone = ?");
                     checkTelefoneStmt.setString(1, telefone);
                     ResultSet checkTelefoneRs = checkTelefoneStmt.executeQuery();
                     if (checkTelefoneRs.next()) {
-                        JOptionPane.showMessageDialog(null, "Este telefone j√° est√° sendo usado por outro cliente.");
+                        JOptionPane.showMessageDialog(null, "Este telefone j· est· sendo usado por outro cliente.");
                         return;
                     }
                     checkTelefoneRs.close();
