@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.sql.*;
 
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
 import javax.swing.table.DefaultTableModel;
@@ -126,14 +127,14 @@ public class Clientes extends JFrame implements AtualizarTabela {
         final int[] selectedRow = new int[1];
         dataTable.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent mouseEvent) {
-                JTable table = (JTable) mouseEvent.getSource();
+                JTable table = (JTable)mouseEvent.getSource();
                 Point point = mouseEvent.getPoint();
                 selectedRow[0] = table.rowAtPoint(point);
                 if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
                     // Obtenha o ID do pedido na linha selecionada. Supondo que o ID seja a primeira coluna da tabela.
-                    int clienteID = ((BigDecimal) dataTable.getValueAt(selectedRow[0], 0)).intValue();
+                    int clienteID = ((BigDecimal)dataTable.getValueAt(selectedRow[0], 0)).intValue();
 
-                    // Abra a janela de edi√ß√£o passando o ID do pedido
+                    // Abra a janela de ediÁ„o passando o ID do pedido
                     new EditarCliente(clienteID).setVisible(true);
                 }
                 if (mouseEvent.getButton() == MouseEvent.BUTTON3) {
@@ -145,7 +146,7 @@ public class Clientes extends JFrame implements AtualizarTabela {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             // Obtenha o ID do pedido na linha selecionada. Supondo que o ID seja a primeira coluna da tabela.
-                            int clienteID = ((BigDecimal) dataTable.getValueAt(selectedRow[0], 0)).intValue();
+                            int clienteID = ((BigDecimal)dataTable.getValueAt(selectedRow[0], 0)).intValue();
 
                             // Abra a janela de edi√ß√£o passando o ID do pedido
                             new EditarCliente(clienteID).setVisible(true);
@@ -155,7 +156,7 @@ public class Clientes extends JFrame implements AtualizarTabela {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             // Obtenha o ID do pedido na linha selecionada. Supondo que o ID seja a primeira coluna da tabela.
-                            int clienteID = ((BigDecimal) dataTable.getValueAt(selectedRow[0], 0)).intValue();
+                            int clienteID = ((BigDecimal)dataTable.getValueAt(selectedRow[0], 0)).intValue();
 
                             try {
                                 // Conecta ao banco de dados
@@ -206,8 +207,8 @@ public class Clientes extends JFrame implements AtualizarTabela {
     private static final Logger LOGGER = Logger.getLogger(EditarCliente.class.getName());
 
     public class EditarCliente extends JFrame {
-        private int clienteID;
 
+        private int clienteID;
         private JComboBox<String> campoAdmin;
         private JComboBox<String> campoAtivo;
         private JTextField campoNome;
@@ -216,7 +217,7 @@ public class Clientes extends JFrame implements AtualizarTabela {
         private JTextField campoCidade;
         private JComboBox<String> campoEstado;
         private JTextField campoEndereco;
-
+        private JButton botaoResetarSenha;
         private JButton botaoSalvar;
 
         public EditarCliente(int clienteID) {
@@ -228,11 +229,10 @@ public class Clientes extends JFrame implements AtualizarTabela {
             campoTelefone = new JTextField();
             campoEmail = new JTextField();
             campoCidade = new JTextField();
-            campoEstado = new JComboBox<>(new String[] {
-                                          "", "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS",
-                                          "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP",
-                                          "SE", "TO"
-                });
+            campoEstado =
+                    new JComboBox<>(new String[] { "", "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
+                                                   "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS",
+                                                   "RO", "RR", "SC", "SP", "SE", "TO" });
             campoEndereco = new JTextField();
 
             // Crie um painel e adicione os campos a ele
@@ -254,9 +254,52 @@ public class Clientes extends JFrame implements AtualizarTabela {
             panel.add(new JLabel("Endere√ßo"));
             panel.add(campoEndereco);
 
+            // Inicialize e adicione o bot„o Resetar Senha
+            botaoResetarSenha = new JButton("Resetar Senha");
+            botaoResetarSenha.setBackground(new Color(255, 255, 102));
+            panel.add(botaoResetarSenha);
+
+            final int finalClienteID = clienteID;
+            botaoResetarSenha.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        Connection conn = DataBaseConnection.getConnection();
+                        PreparedStatement checkStmt = conn.prepareStatement("SELECT senha FROM clientes WHERE id = ?");
+                        checkStmt.setInt(1, finalClienteID);
+                        ResultSet checkRs = checkStmt.executeQuery();
+                        if (checkRs.next()) {
+                            String senha = checkRs.getString("senha");
+                            if (senha == null) {
+                                JOptionPane.showMessageDialog(null, "Usu·rio n„o possui senha");
+                                return;
+                            }
+                        }
+                        checkRs.close();
+                        checkStmt.close();
+
+                        int confirm =
+                            JOptionPane.showConfirmDialog(null, "Tem certeza de que deseja resetar a senha deste usu·rio?",
+                                                          "ConfirmaÁ„o", JOptionPane.YES_NO_OPTION);
+                        if (confirm == JOptionPane.YES_OPTION) {
+                            String sql = "UPDATE clientes SET senha = NULL WHERE id = ?";
+                            PreparedStatement pstmt = conn.prepareStatement(sql);
+                            pstmt.setInt(1, finalClienteID);
+                            pstmt.executeUpdate();
+                            pstmt.close();
+                            JOptionPane.showMessageDialog(null, "Senha Resetada");
+                        }
+                        conn.close();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
             // Inicialize e adicione o bot„o Salvar
             botaoSalvar = new JButton("Salvar");
-            botaoSalvar.setBackground(new Color(0, 204, 51)); // Muda a cor do bot„o para azul
+            botaoSalvar.setBackground(new Color(0, 204, 51));
+            panel.add(botaoSalvar);
 
             botaoSalvar.addActionListener(new ActionListener() {
                 @Override
@@ -353,8 +396,7 @@ public class Clientes extends JFrame implements AtualizarTabela {
                 checkTelefoneStmt.close();
 
                 String sql =
-                    "UPDATE clientes SET admin = ?, ativo = ?, nome = ?, telefone = ?, email = ?, " +
-                    "cidade = ?, estado = ?, endereco = ? WHERE id = ?";
+                    "UPDATE clientes SET admin = ?, ativo = ?, nome = ?, telefone = ?, email = ?, " + "cidade = ?, estado = ?, endereco = ? WHERE id = ?";
 
                 PreparedStatement pstmt = conn.prepareStatement(sql);
 
@@ -364,7 +406,7 @@ public class Clientes extends JFrame implements AtualizarTabela {
                 pstmt.setString(4, campoTelefone.getText().toUpperCase());
                 pstmt.setString(5, campoEmail.getText());
                 pstmt.setString(6, campoCidade.getText().toUpperCase());
-                pstmt.setString(7, (String) campoEstado.getSelectedItem());
+                pstmt.setString(7, (String)campoEstado.getSelectedItem());
                 pstmt.setString(8, campoEndereco.getText().toUpperCase());
                 pstmt.setInt(9, clienteID);
 
@@ -425,8 +467,8 @@ public class Clientes extends JFrame implements AtualizarTabela {
         }
 
         @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-                                                       int row, int column) {
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                       boolean hasFocus, int row, int column) {
             JLabel label = new JLabel(icon);
             return label;
         }

@@ -30,8 +30,7 @@ public class Login extends JFrame {
         loginButton.setForeground(Color.BLACK);
         loginButton.setOpaque(true);
 
-        ImageIcon loginIcon =
-            IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\entrar.png",
+        ImageIcon loginIcon = IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\entrar.png",
                                    20, 20);
         loginButton.setIcon(loginIcon);
 
@@ -43,8 +42,7 @@ public class Login extends JFrame {
         registerButton.setForeground(Color.BLACK);
         registerButton.setOpaque(true);
 
-        ImageIcon icon =
-            IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\cadastro.png",
+        ImageIcon icon = IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\cadastro.png",
                                    20, 20);
         registerButton.setIcon(icon);
 

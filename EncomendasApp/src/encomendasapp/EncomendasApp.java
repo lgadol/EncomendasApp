@@ -74,15 +74,13 @@ public class EncomendasApp extends JFrame {
             pedidosButtonPanel.add(pedidosButton);
             buttonPanel.add(pedidosButtonPanel);
 
-            ImageIcon iconClientes =
-                IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\clientes.png",
+            ImageIcon iconClientes = IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\clientes.png",
                                        20, 20);
             clientesButton.setIcon(iconClientes);
             clientesButton.setBackground(new Color(141, 218, 253));
             clientesButton.setForeground(Color.BLACK);
 
-            ImageIcon iconPedidos =
-                IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\pedidos.png",
+            ImageIcon iconPedidos = IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\pedidos.png",
                                        20, 20);
             pedidosButton.setIcon(iconPedidos);
             pedidosButton.setBackground(new Color(141, 218, 253));
@@ -121,8 +119,7 @@ public class EncomendasApp extends JFrame {
         meusPedidosButtonPanel.add(meusPedidosButton);
         buttonPanel.add(meusPedidosButtonPanel);
 
-        ImageIcon iconMeusPedidos =
-            IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\meus_pedidos.png",
+        ImageIcon iconMeusPedidos = IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\meus_pedidos.png",
                                    20, 20);
         meusPedidosButton.setIcon(iconMeusPedidos);
         meusPedidosButton.setBackground(new Color(141, 218, 253));
@@ -155,8 +152,7 @@ public class EncomendasApp extends JFrame {
         buttonPanel.add(logoffButtonPanel);
 
 
-        ImageIcon icon =
-            IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\sair.png",
+        ImageIcon icon = IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\sair.png",
                                    20, 20);
         logoffButton.setIcon(icon);
 

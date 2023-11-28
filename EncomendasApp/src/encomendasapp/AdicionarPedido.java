@@ -1,6 +1,5 @@
 package encomendasapp;
 
-import encomendasapp.AtualizarTabela;
 
 import javax.swing.*;
 
