@@ -259,14 +259,14 @@ public class Pedidos extends JFrame implements AtualizarTabela {
             panel.add(campoPagamentoAdiantado);
             panel.add(new JLabel("Tipo de Pagamento"));
             panel.add(campoTipoPagamento);
-            panel.add(new JLabel("PreÃ§o Pago"));
+            panel.add(new JLabel("Preço Pago"));
             panel.add(campoPrecoPago);
             panel.add(new JLabel("Kgs"));
             panel.add(campoKgs);
 
             // Inicialize e adicione o botão Salvar
             botaoSalvar = new JButton("Salvar");
-            botaoSalvar.setBackground(new Color(0, 204, 51)); // Muda a cor do botão para azul
+            botaoSalvar.setBackground(new Color(0, 204, 51));
             panel.add(botaoSalvar);
 
             botaoSalvar.addActionListener(new ActionListener() {
@@ -358,7 +358,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
         }
     }
 
-    // MÃ©todo para atualizar os dados da tabela
+    // Método para atualizar os dados da tabela
 
     public void atualizarDadosTabela() {
         Vector<Vector<Object>> data = new Vector<>();

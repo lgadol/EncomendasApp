@@ -70,8 +70,7 @@ public class AdicionarCliente extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (nomeField.getText().isEmpty() || telefoneField.getText().isEmpty() ||
-                    emailField.getText().isEmpty() || cidadeField.getText().isEmpty() ||
-                    enderecoField.getText().isEmpty()) {
+                    emailField.getText().isEmpty() || cidadeField.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos!");
                 } else if (!telefoneField.getText().matches("^\\d{2} \\d{8,9}$")) {
                     JOptionPane.showMessageDialog(null,

@@ -148,7 +148,7 @@ public class Clientes extends JFrame implements AtualizarTabela {
                             // Obtenha o ID do pedido na linha selecionada. Supondo que o ID seja a primeira coluna da tabela.
                             int clienteID = ((BigDecimal)dataTable.getValueAt(selectedRow[0], 0)).intValue();
 
-                            // Abra a janela de edi√ß√£o passando o ID do pedido
+                            // Abra a janela de ediÁ„o passando o ID do pedido
                             new EditarCliente(clienteID).setVisible(true);
                         }
                     });
@@ -168,17 +168,17 @@ public class Clientes extends JFrame implements AtualizarTabela {
                                 // Cria um PreparedStatement para executar a query SQL
                                 PreparedStatement pstmt = conn.prepareStatement(sql);
 
-                                // Define o valor do par√¢metro na query SQL
+                                // Define o valor do parametro na query SQL
                                 pstmt.setInt(1, clienteID);
 
                                 // Executa a query SQL
                                 pstmt.executeUpdate();
 
-                                // Fecha o PreparedStatement e a conex√£o
+                                // Fecha o PreparedStatement e a conex„o
                                 pstmt.close();
                                 conn.close();
 
-                                // Atualiza a tabela ap√≥s a exclus√£o
+                                // Atualiza a tabela apÛs a exclus„o
                                 atualizarDadosTabela();
                             } catch (SQLException ex) {
                                 ex.printStackTrace();
@@ -200,7 +200,7 @@ public class Clientes extends JFrame implements AtualizarTabela {
         setLocationRelativeTo(null);
         setVisible(true);
 
-        // Chame o m√©todo para preencher a tabela quando a janela for aberta
+        // Chame o mÈtodo para preencher a tabela quando a janela for aberta
         atualizarDadosTabela();
     }
 
@@ -347,7 +347,7 @@ public class Clientes extends JFrame implements AtualizarTabela {
         }
 
         private void salvarDadosPedido() {
-            LOGGER.info("Conex√£o estabelecida.");
+            LOGGER.info("Conex„o estabelecida.");
 
             Pattern patternEmail = Pattern.compile("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)*(\\.[a-zA-Z]{2,})$");
             Matcher matcherEmail = patternEmail.matcher(campoEmail.getText());
@@ -367,7 +367,7 @@ public class Clientes extends JFrame implements AtualizarTabela {
             try {
                 LOGGER.info("Conectando ao banco de dados...");
                 Connection conn = DataBaseConnection.getConnection();
-                LOGGER.info("Conex√£o estabelecida.");
+                LOGGER.info("Conex„o estabelecida.");
 
                 // Verificar se o email j· existe
                 PreparedStatement checkStmt =
@@ -410,9 +410,9 @@ public class Clientes extends JFrame implements AtualizarTabela {
                 pstmt.setString(8, campoEndereco.getText().toUpperCase());
                 pstmt.setInt(9, clienteID);
 
-                LOGGER.info("Executando a atualiza√ß√£o...");
+                LOGGER.info("Executando a atualizaÁ„o...");
                 pstmt.executeUpdate();
-                LOGGER.info("Atualiza√ß√£o executada.");
+                LOGGER.info("AtualizaÁ„o executada.");
 
                 pstmt.close();
                 conn.close();
