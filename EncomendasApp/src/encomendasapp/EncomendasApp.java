@@ -6,6 +6,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.util.Map;
+
 public class EncomendasApp extends JFrame {
     private JButton clientesButton;
     private JButton pedidosButton;
@@ -20,6 +22,7 @@ public class EncomendasApp extends JFrame {
     private JLabel nomeUsuarioLabel;
     private JPanel panel;
     private JPanel buttonPanel;
+    private MinhaConta minhaConta;
 
     public EncomendasApp(int admin, String nomeUsuarioLogado) {
         this.admin = admin;
@@ -74,13 +77,15 @@ public class EncomendasApp extends JFrame {
             pedidosButtonPanel.add(pedidosButton);
             buttonPanel.add(pedidosButtonPanel);
 
-            ImageIcon iconClientes = IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\clientes.png",
+            ImageIcon iconClientes =
+                IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\clientes.png",
                                        20, 20);
             clientesButton.setIcon(iconClientes);
             clientesButton.setBackground(new Color(141, 218, 253));
             clientesButton.setForeground(Color.BLACK);
 
-            ImageIcon iconPedidos = IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\pedidos.png",
+            ImageIcon iconPedidos =
+                IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\pedidos.png",
                                        20, 20);
             pedidosButton.setIcon(iconPedidos);
             pedidosButton.setBackground(new Color(141, 218, 253));
@@ -119,7 +124,8 @@ public class EncomendasApp extends JFrame {
         meusPedidosButtonPanel.add(meusPedidosButton);
         buttonPanel.add(meusPedidosButtonPanel);
 
-        ImageIcon iconMeusPedidos = IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\meus_pedidos.png",
+        ImageIcon iconMeusPedidos =
+            IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\meus_pedidos.png",
                                    20, 20);
         meusPedidosButton.setIcon(iconMeusPedidos);
         meusPedidosButton.setBackground(new Color(141, 218, 253));
@@ -140,6 +146,46 @@ public class EncomendasApp extends JFrame {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
 
+        JButton minhaContaButton = new JButton("Minha Conta");
+        minhaContaButton.setPreferredSize(buttonSize);
+        minhaContaButton.setMinimumSize(buttonSize);
+        minhaContaButton.setMaximumSize(buttonSize);
+        minhaContaButton.setBackground(new Color(141, 218, 253));
+        minhaContaButton.setForeground(Color.BLACK);
+
+        // Adiciona um ActionListener ao botão "Minha Conta"
+        minhaContaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Cria uma instância de GerenciadorDeUsuarios
+                GerenciadorDeUsuarios gerenciadorDeUsuarios = new GerenciadorDeUsuarios();
+
+                // Obtem as informações do usuário do banco de dados
+                Map<String, String> usuario = gerenciadorDeUsuarios.obterUsuarioDoBancoDeDados(nomeUsuarioLogado);
+
+                // Verifica se a janela já está aberta
+                if (minhaConta != null && minhaConta.isVisible()) {
+                    minhaConta.toFront();
+                    minhaConta.repaint();
+                } else {
+                    // Cria e exibe a janela MinhaConta
+                    minhaConta = new MinhaConta(usuario);
+                    minhaConta.setVisible(true);
+                }
+            }
+        });
+
+        // Cria um JPanel para o botão "Minha Conta" e adiciona o botão a este painel
+        JPanel minhaContaButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        minhaContaButtonPanel.add(minhaContaButton);
+        ImageIcon iconMinhaConta =
+            IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\perfil.png",
+                                   20, 20);
+        minhaContaButton.setIcon(iconMinhaConta);
+
+        // Adiciona o painel do botão "Minha Conta" ao painel de botões
+        buttonPanel.add(minhaContaButtonPanel);
+
         logoffButton = new JButton("Sair");
         logoffButton.setPreferredSize(buttonSize);
         logoffButton.setBackground(new Color(255, 51, 0));
@@ -152,14 +198,18 @@ public class EncomendasApp extends JFrame {
         buttonPanel.add(logoffButtonPanel);
 
 
-        ImageIcon icon = IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\sair.png",
+        ImageIcon iconSair =
+            IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\sair.png",
                                    20, 20);
-        logoffButton.setIcon(icon);
+        logoffButton.setIcon(iconSair);
 
         logoffButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Fecha todas as janelas
+                if (minhaConta != null && minhaConta.isVisible()) {
+                    minhaConta.dispose();
+                }
                 if (clientes != null) {
                     clientes.dispose();
                 }
