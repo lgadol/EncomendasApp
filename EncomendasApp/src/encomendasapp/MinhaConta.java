@@ -12,7 +12,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MinhaConta extends JFrame {
+    private EditarConta editarConta;
+    
     public MinhaConta(Map<String, String> usuario) {
+        
         // Cria JLabels para exibir as informações do usuário
         JLabel adminLabel = new JLabel("Admin: " + usuario.get("admin"));
         JLabel nomeUsuarioLabel = new JLabel("Nome: " + usuario.get("nome"));
@@ -67,9 +70,13 @@ public class MinhaConta extends JFrame {
         editarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new EditarConta(usuarioArray).setVisible(true);
+                if (editarConta == null || !editarConta.isVisible()) {
+                    editarConta = new EditarConta(usuarioArray);
+                    editarConta.setVisible(true);
+                }
             }
         });
+
 
         // Adiciona o botão "Editar" ao JPanel
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
