@@ -71,7 +71,7 @@ public class MinhaConta extends JFrame {
         });
 
         // Adiciona o botão "Editar" ao JPanel
-        panel.add(Box.createRigidArea(new Dimension(0, 10))); // Adiciona espaço entre as labels e o botão
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(editarButton);
 
 
