@@ -40,7 +40,7 @@ public class EditarConta extends JFrame {
         JPanel panel = new JPanel(new GridLayout(9, 2));
 
         // Adiciona os JTextFields ao JPanel
-        panel.add(new JLabel("Admin:"));
+        panel.add(new JLabel("Adminss:"));
         panel.add(adminField);
         panel.add(new JLabel("Nome do usuário:"));
         panel.add(nomeUsuarioField);
