@@ -62,11 +62,12 @@ public class MinhaConta extends JFrame {
         JButton editarButton = new JButton("Editar");
         editarButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Adiciona um ActionListener ao botão "Editar"
+        final Map<String, String>[] usuarioArray = new Map[]{usuario};
+
         editarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Adicione aqui o código que será executado quando o botão "Editar" for clicado
+                new EditarConta(usuarioArray).setVisible(true);
             }
         });
 
@@ -81,6 +82,7 @@ public class MinhaConta extends JFrame {
         // Configura o JFrame
         pack();
         setSize(500, 400);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
     }

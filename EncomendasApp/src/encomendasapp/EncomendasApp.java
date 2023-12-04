@@ -174,7 +174,7 @@ public class EncomendasApp extends JFrame {
                 }
             }
         });
-
+        
         // Cria um JPanel para o botão "Minha Conta" e adiciona o botão a este painel
         JPanel minhaContaButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         minhaContaButtonPanel.add(minhaContaButton);
