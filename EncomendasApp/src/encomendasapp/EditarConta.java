@@ -71,13 +71,16 @@ public class EditarConta extends JFrame {
                 usuarioArray[0].put("endereco", enderecoField.getText());
 
                 // Verifica a senha
-                String senha = new String(senhaField.getPassword());
+                String senha = new String(senhaField.getPassword()).trim();
+                
+                System.out.println("Senha inserida: " + senha);  // Imprime a senha inserida
+            
+                System.out.println("Senha no array: " + usuarioArray[0].get("senha"));  // Imprime a senha no array
                 if (!senha.equals(usuarioArray[0].get("senha"))) {
                     JOptionPane.showMessageDialog(null, "Senha incorreta!");
                     return;
                 }
-                System.out.println("Senha armazenada: " + usuarioArray[0].get("senha"));
-
+                
                 SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
                     @Override
                     protected Void doInBackground() throws Exception {

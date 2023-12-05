@@ -21,19 +21,22 @@ public class GerenciadorDeUsuarios {
             conn = DataBaseConnection.getConnection();
             stmt = conn.createStatement();
             String sql =
-                "SELECT admin, nome, telefone, email, cidade, estado, endereco FROM clientes WHERE nome = '" + nomeUsuarioLogado +
+                "SELECT admin, nome, telefone, email, cidade, estado, endereco, senha FROM clientes WHERE nome = '" + nomeUsuarioLogado +
                 "'";
             rs = stmt.executeQuery(sql);
 
-            if (rs.next()) {
-                usuario.put("admin", rs.getString("admin"));
-                usuario.put("nome", rs.getString("nome"));
-                usuario.put("telefone", rs.getString("telefone"));
-                usuario.put("email", rs.getString("email"));
-                usuario.put("cidade", rs.getString("cidade"));
-                usuario.put("estado", rs.getString("estado"));
-                usuario.put("endereco", rs.getString("endereco"));
-            }
+                if (rs.next()) {
+                    usuario.put("admin", rs.getString("admin"));
+                    usuario.put("nome", rs.getString("nome"));
+                    usuario.put("telefone", rs.getString("telefone"));
+                    usuario.put("email", rs.getString("email"));
+                    usuario.put("cidade", rs.getString("cidade"));
+                    usuario.put("estado", rs.getString("estado"));
+                    usuario.put("endereco", rs.getString("endereco"));
+                    // Supondo que a senha esteja armazenada na coluna "senha" do banco de dados
+                    usuario.put("senha", rs.getString("senha"));
+                    System.out.println("Senha obtida do banco de dados: " + rs.getString("senha"));  // Imprime a senha obtida do banco de dados
+                }
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
