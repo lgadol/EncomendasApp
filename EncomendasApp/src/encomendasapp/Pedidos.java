@@ -40,12 +40,12 @@ public class Pedidos extends JFrame implements AtualizarTabela {
         columnNames.add("Pago");
         columnNames.add("Pagamento Adiantado");
         columnNames.add("Tipo de Pagamento");
-        columnNames.add("Preço Pago");
+        columnNames.add("Preï¿½o Pago");
         columnNames.add("Quilos");
-        columnNames.add("Preço por Kg");
+        columnNames.add("Preï¿½o por Kg");
         columnNames.add("Data da Encomenda");
 
-        // Botão Adicionar Pedidos
+        // Botï¿½o Adicionar Pedidos
         addButton = new JButton("Adicionar Pedido");
         ImageIcon addIcon =
             new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\adicionar-ao-carrinho.png");
@@ -53,7 +53,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
         addButton.setBackground(new Color(0, 204, 51));
         addIcon = new ImageIcon(addImage);
 
-        // Botão Limpar Registros
+        // Botï¿½o Limpar Registros
         clearButton = new JButton("Limpar Registros");
         ImageIcon clearIcon =
             new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\deletar-lixeira.png");
@@ -61,7 +61,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
         clearButton.setBackground(new Color(255, 51, 0));
         clearIcon = new ImageIcon(clearImage);
 
-        // Adicionando os botões
+        // Adicionando os botï¿½es
         addButton.setIcon(addIcon);
         clearButton.setIcon(clearIcon);
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
@@ -69,17 +69,17 @@ public class Pedidos extends JFrame implements AtualizarTabela {
         buttonPanel.add(clearButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // Remova todos os ouvintes de ação existentes
+        // Remova todos os ouvintes de aï¿½ï¿½o existentes
         for (ActionListener al : addButton.getActionListeners()) {
             addButton.removeActionListener(al);
         }
-        
+
         final AdicionarPedido[] adicionarPedidoWindow = new AdicionarPedido[1];
 
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LOGGER.info("Seu método foi chamado");
+                LOGGER.info("Seu mï¿½todo foi chamado");
                 if (adicionarPedidoWindow[0] == null || !adicionarPedidoWindow[0].isVisible()) {
                     adicionarPedidoWindow[0] = new AdicionarPedido(admin, nomeUsuarioLogado, Pedidos.this);
                     adicionarPedidoWindow[0].setVisible(true);
@@ -87,7 +87,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                     adicionarPedidoWindow[0].toFront();
                     adicionarPedidoWindow[0].repaint();
                 }
-                // Atualiza a tabela após adicionar o pedido
+                // Atualiza a tabela apï¿½s adicionar o pedido
                 atualizarDadosTabela();
             }
         });
@@ -106,13 +106,13 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                     stmt.close();
 
                     if (count == 0) {
-                        // Se não houver registros, mostra uma mensagem
-                        JOptionPane.showMessageDialog(null, "Não há nenhum pedido para excluir");
+                        // Se nï¿½o houver registros, mostra uma mensagem
+                        JOptionPane.showMessageDialog(null, "Nï¿½o hï¿½ nenhum pedido para excluir");
                     } else {
-                        // Se houver registros, mostra um diálogo de confirmação
+                        // Se houver registros, mostra um diï¿½logo de confirmaï¿½ï¿½o
                         int confirm =
                             JOptionPane.showConfirmDialog(null, "Tem certeza de que deseja excluir todos os pedidos?",
-                                                          "Confirmação", JOptionPane.YES_NO_OPTION);
+                                                          "Confirmaï¿½ï¿½o", JOptionPane.YES_NO_OPTION);
                         if (confirm == JOptionPane.YES_OPTION) {
                             // Exclui todos os registros
                             PreparedStatement deleteStmt = conn.prepareStatement("DELETE FROM pedidos");
@@ -122,7 +122,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                     }
 
                     conn.close();
-                    // Atualiza a tabela após todas as exclusões terem sido concluídas
+                    // Atualiza a tabela apï¿½s todas as exclusï¿½es terem sido concluï¿½das
                     atualizarDadosTabela();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
@@ -143,7 +143,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                     // Obtenha o ID do pedido na linha selecionada. Supondo que o ID seja a primeira coluna da tabela.
                     int pedidoId = ((BigDecimal)dataTable.getValueAt(selectedRow[0], 0)).intValue();
 
-                    // Abra a janela de edição passando o ID do pedido
+                    // Abra a janela de ediï¿½ï¿½o passando o ID do pedido
                     new EditarPedido(pedidoId).setVisible(true);
                 }
                 if (mouseEvent.getButton() == MouseEvent.BUTTON3) {
@@ -187,7 +187,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                                 pstmt.close();
                                 conn.close();
 
-                                // Atualiza a tabela após a exclusão
+                                // Atualiza a tabela apï¿½s a exclusï¿½o
                                 atualizarDadosTabela();
                             } catch (SQLException ex) {
                                 ex.printStackTrace();
@@ -209,7 +209,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
         setLocationRelativeTo(null);
         setVisible(true);
 
-        // Chame o método para preencher a tabela quando a janela for aberta
+        // Chame o mï¿½todo para preencher a tabela quando a janela for aberta
         atualizarDadosTabela();
     }
 
@@ -237,8 +237,8 @@ public class Pedidos extends JFrame implements AtualizarTabela {
             campoCategoria = new JComboBox<>(new String[] { "GADO", "PORCO", "FRANGO", "OUTRO" });
             campoTipoCarne = new JTextField();
             campoTipoCorte = new JTextField();
-            campoPago = new JComboBox<>(new String[] { "SIM", "NÃO" });
-            campoPagamentoAdiantado = new JComboBox<>(new String[] { "SIM", "NÃO" });
+            campoPago = new JComboBox<>(new String[] { "SIM", "Nï¿½O" });
+            campoPagamentoAdiantado = new JComboBox<>(new String[] { "SIM", "Nï¿½O" });
             campoTipoPagamento = new JComboBox<>(new String[] { "DINHEIRO", "CREDITO", "DEBITO", "PIX", "OUTRO" });
             campoPrecoPago = new JTextField();
             campoKgs = new JTextField();
@@ -259,12 +259,12 @@ public class Pedidos extends JFrame implements AtualizarTabela {
             panel.add(campoPagamentoAdiantado);
             panel.add(new JLabel("Tipo de Pagamento"));
             panel.add(campoTipoPagamento);
-            panel.add(new JLabel("Preço Pago"));
+            panel.add(new JLabel("Preï¿½o Pago"));
             panel.add(campoPrecoPago);
             panel.add(new JLabel("Kgs"));
             panel.add(campoKgs);
 
-            // Inicialize e adicione o botão Salvar
+            // Inicialize e adicione o botï¿½o Salvar
             botaoSalvar = new JButton("Salvar");
             botaoSalvar.setBackground(new Color(0, 204, 51));
             panel.add(botaoSalvar);
@@ -295,8 +295,8 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                     campoCategoria.setSelectedItem(rs.getString("categoria"));
                     campoTipoCarne.setText(rs.getString("tipo_carne"));
                     campoTipoCorte.setText(rs.getString("tipo_corte"));
-                    campoPago.setSelectedItem(rs.getInt("pago") == 1 ? "SIM" : "NÃO");
-                    campoPagamentoAdiantado.setSelectedItem(rs.getInt("pagamento_adiantado") == 1 ? "SIM" : "NÃO");
+                    campoPago.setSelectedItem(rs.getInt("pago") == 1 ? "SIM" : "Nï¿½O");
+                    campoPagamentoAdiantado.setSelectedItem(rs.getInt("pagamento_adiantado") == 1 ? "SIM" : "Nï¿½O");
                     campoTipoPagamento.setSelectedItem(rs.getString("tipo_pagamento"));
                     campoPrecoPago.setText(rs.getString("preco_pago"));
                     campoKgs.setText(rs.getString("kgs"));
@@ -338,19 +338,19 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                 pstmt.setString(9, campoKgs.getText().toUpperCase());
                 pstmt.setInt(10, pedidoId);
 
-                LOGGER.info("Executando a atualização...");
+                LOGGER.info("Executando a atualizaï¿½ï¿½o...");
                 pstmt.executeUpdate();
-                LOGGER.info("Atualização executada.");
+                LOGGER.info("Atualizaï¿½ï¿½o executada.");
                 pstmt.close();
 
                 conn.close();
             } catch (SQLException ex) {
-                LOGGER.severe("Uma exceção SQLException foi lançada.");
+                LOGGER.severe("Uma exceï¿½ï¿½o SQLException foi lanï¿½ada.");
                 ex.printStackTrace();
             }
             LOGGER.info("Finalizando salvarDadosPedido.");
 
-            // Feche a janela de edição
+            // Feche a janela de ediï¿½ï¿½o
             dispose();
 
             // Atualize a lista
@@ -358,7 +358,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
         }
     }
 
-    // Método para atualizar os dados da tabela
+    // Mï¿½todo para atualizar os dados da tabela
 
     public void atualizarDadosTabela() {
         Vector<Vector<Object>> data = new Vector<>();

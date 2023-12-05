@@ -30,7 +30,8 @@ public class Login extends JFrame {
         loginButton.setForeground(Color.BLACK);
         loginButton.setOpaque(true);
 
-        ImageIcon loginIcon = IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\entrar.png",
+        ImageIcon loginIcon =
+            IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\entrar.png",
                                    20, 20);
         loginButton.setIcon(loginIcon);
 
@@ -42,7 +43,8 @@ public class Login extends JFrame {
         registerButton.setForeground(Color.BLACK);
         registerButton.setOpaque(true);
 
-        ImageIcon icon = IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\cadastro.png",
+        ImageIcon icon =
+            IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\cadastro.png",
                                    20, 20);
         registerButton.setIcon(icon);
 
@@ -88,7 +90,7 @@ public class Login extends JFrame {
                             updateStmt.setString(2, email);
                             updateStmt.executeUpdate();
                             updateStmt.close();
-                            JOptionPane.showMessageDialog(null, "Senha definida com sucesso. Faça login novamente.");
+                            JOptionPane.showMessageDialog(null, "Senha definida com sucesso. Faï¿½a login novamente.");
                         } else if (storedPassword.equals(password) && ativo == 1) {
                             JOptionPane.showMessageDialog(null, "Bem-Vindo, " + nomeUsuarioLogado);
                             idUsuarioLogado = rs.getInt("id");
@@ -101,7 +103,7 @@ public class Login extends JFrame {
                             encomendasApp.setVisible(true);
                             dispose();
                         } else if (ativo == 0) {
-                            JOptionPane.showMessageDialog(null, "Usuário desativado");
+                            JOptionPane.showMessageDialog(null, "Usuï¿½rio desativado");
                         } else {
                             JOptionPane.showMessageDialog(null, "Dados incorretos");
                         }

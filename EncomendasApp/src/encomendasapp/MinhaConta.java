@@ -13,9 +13,9 @@ import java.awt.event.ActionListener;
 
 public class MinhaConta extends JFrame {
     private EditarConta editarConta;
-    
+
     public MinhaConta(Map<String, String> usuario) {
-        
+
         // Cria JLabels para exibir as informações do usuário
         JLabel adminLabel = new JLabel("Admin: " + usuario.get("admin"));
         JLabel nomeUsuarioLabel = new JLabel("Nome: " + usuario.get("nome"));
@@ -65,7 +65,7 @@ public class MinhaConta extends JFrame {
         JButton editarButton = new JButton("Editar");
         editarButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        final Map<String, String>[] usuarioArray = new Map[]{usuario};
+        final Map<String, String>[] usuarioArray = new Map[] { usuario };
 
         editarButton.addActionListener(new ActionListener() {
             @Override
@@ -76,7 +76,6 @@ public class MinhaConta extends JFrame {
                 }
             }
         });
-
 
         // Adiciona o botão "Editar" ao JPanel
         panel.add(Box.createRigidArea(new Dimension(0, 10)));

@@ -30,10 +30,10 @@ public class Cadastro extends JFrame {
         telefoneField = new JTextField();
         emailField = new JTextField();
         cidadeField = new JTextField();
-        estadoBox = new JComboBox<>(new String[] {
-                                    "", "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG",
-                                    "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"
-            });
+        estadoBox =
+                new JComboBox<>(new String[] { "", "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT",
+                                               "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR",
+                                               "SC", "SP", "SE", "TO" });
         enderecoField = new JTextField();
         senhaField = new JPasswordField();
         confirmaSenhaField = new JPasswordField();
@@ -55,11 +55,11 @@ public class Cadastro extends JFrame {
         formPanel.add(cidadeField);
         formPanel.add(new JLabel("Estado:"));
         formPanel.add(estadoBox);
-        formPanel.add(new JLabel("Endereço:"));
+        formPanel.add(new JLabel("Endereï¿½o:"));
         formPanel.add(enderecoField);
         formPanel.add(new JLabel("Senha:"));
         formPanel.add(senhaField);
-        formPanel.add(new JLabel("Confirmação de Senha:"));
+        formPanel.add(new JLabel("Confirmaï¿½ï¿½o de Senha:"));
         formPanel.add(confirmaSenhaField);
 
         // Adicionando os botÃµes ao painel de botÃµes
@@ -77,14 +77,14 @@ public class Cadastro extends JFrame {
                 String telefone = telefoneField.getText();
                 String email = emailField.getText();
                 String cidade = cidadeField.getText().toUpperCase();
-                String estado = (String) estadoBox.getSelectedItem();
+                String estado = (String)estadoBox.getSelectedItem();
                 String endereco = enderecoField.getText().toUpperCase();
-                String senha = new String(((JPasswordField) senhaField).getPassword());
-                String confirmaSenha = new String(((JPasswordField) confirmaSenhaField).getPassword());
+                String senha = new String(((JPasswordField)senhaField).getPassword());
+                String confirmaSenha = new String(((JPasswordField)confirmaSenhaField).getPassword());
 
                 // ValidaÃ§Ã£o dos campos obrigatÃ³rios
                 if (nome.isEmpty() || telefone.isEmpty() || email.isEmpty() || senha.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos obrigatórios.");
+                    JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos obrigatï¿½rios.");
                     return;
                 }
 
@@ -92,7 +92,7 @@ public class Cadastro extends JFrame {
                 Pattern patternEmail = Pattern.compile("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)*(\\.[a-zA-Z]{2,})$");
                 Matcher matcherEmail = patternEmail.matcher(email);
                 if (!matcherEmail.find()) {
-                    JOptionPane.showMessageDialog(null, "Email inválido");
+                    JOptionPane.showMessageDialog(null, "Email invï¿½lido");
                     return;
                 }
 
@@ -100,17 +100,17 @@ public class Cadastro extends JFrame {
                 Pattern patternTelefone = Pattern.compile("^\\d{2} \\d{8,9}$");
                 Matcher matcherTelefone = patternTelefone.matcher(telefone);
                 if (!matcherTelefone.find()) {
-                    JOptionPane.showMessageDialog(null, "Telefone inválido, digite no formato 'DD + número' ");
+                    JOptionPane.showMessageDialog(null, "Telefone invï¿½lido, digite no formato 'DD + nï¿½mero' ");
                     return;
                 }
 
                 // ValidaÃ§Ã£o da senha
                 if (!senha.equals(confirmaSenha)) {
-                    JOptionPane.showMessageDialog(null, "As senhas não coincidem.");
+                    JOptionPane.showMessageDialog(null, "As senhas nï¿½o coincidem.");
                     return;
                 }
 
-                // Conexão com o banco de dados e inserção dos dados
+                // Conexï¿½o com o banco de dados e inserï¿½ï¿½o dos dados
                 try {
                     Connection con = DataBaseConnection.getConnection();
 
@@ -119,19 +119,19 @@ public class Cadastro extends JFrame {
                     checkEmailStmt.setString(1, email);
                     ResultSet checkEmailRs = checkEmailStmt.executeQuery();
                     if (checkEmailRs.next()) {
-                        JOptionPane.showMessageDialog(null, "Este email já está sendo usado por outro cliente.");
+                        JOptionPane.showMessageDialog(null, "Este email jï¿½ estï¿½ sendo usado por outro cliente.");
                         return;
                     }
                     checkEmailRs.close();
                     checkEmailStmt.close();
 
-                    // Verificar se o telefone já existe
+                    // Verificar se o telefone jï¿½ existe
                     PreparedStatement checkTelefoneStmt =
                         con.prepareStatement("SELECT * FROM clientes WHERE telefone = ?");
                     checkTelefoneStmt.setString(1, telefone);
                     ResultSet checkTelefoneRs = checkTelefoneStmt.executeQuery();
                     if (checkTelefoneRs.next()) {
-                        JOptionPane.showMessageDialog(null, "Este telefone já está sendo usado por outro cliente.");
+                        JOptionPane.showMessageDialog(null, "Este telefone jï¿½ estï¿½ sendo usado por outro cliente.");
                         return;
                     }
                     checkTelefoneRs.close();
