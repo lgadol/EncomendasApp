@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class GerenciadorDeUsuarios {
 
-    public Map<String, String> obterUsuarioDoBancoDeDados(String nomeUsuarioLogado) {
+    public Map<String, String> obterUsuarioDoBancoDeDados(int idUsuario) {
         Map<String, String> usuario = new HashMap<>();
         Connection conn = null;
         Statement stmt = null;
@@ -21,22 +21,25 @@ public class GerenciadorDeUsuarios {
             conn = DataBaseConnection.getConnection();
             stmt = conn.createStatement();
             String sql =
-                "SELECT admin, nome, telefone, email, cidade, estado, endereco, senha FROM clientes WHERE nome = '" + nomeUsuarioLogado +
-                "'";
+                "SELECT id, admin, nome, telefone, email, cidade, estado, endereco, senha FROM clientes WHERE id = " +
+                idUsuario;
+
             rs = stmt.executeQuery(sql);
 
-                if (rs.next()) {
-                    usuario.put("admin", rs.getString("admin"));
-                    usuario.put("nome", rs.getString("nome"));
-                    usuario.put("telefone", rs.getString("telefone"));
-                    usuario.put("email", rs.getString("email"));
-                    usuario.put("cidade", rs.getString("cidade"));
-                    usuario.put("estado", rs.getString("estado"));
-                    usuario.put("endereco", rs.getString("endereco"));
-                    // Supondo que a senha esteja armazenada na coluna "senha" do banco de dados
-                    usuario.put("senha", rs.getString("senha"));
-                    System.out.println("Senha obtida do banco de dados: " + rs.getString("senha"));  // Imprime a senha obtida do banco de dados
-                }
+            if (rs.next()) {
+                usuario.put("id", rs.getString("id"));
+                usuario.put("admin", rs.getString("admin"));
+                usuario.put("nome", rs.getString("nome"));
+                usuario.put("telefone", rs.getString("telefone"));
+                usuario.put("email", rs.getString("email"));
+                usuario.put("cidade", rs.getString("cidade"));
+                usuario.put("estado", rs.getString("estado"));
+                usuario.put("endereco", rs.getString("endereco"));
+                // Supondo que a senha esteja armazenada na coluna "senha" do banco de dados
+                usuario.put("senha", rs.getString("senha"));
+                System.out.println("Senha obtida do banco de dados: " +
+                                   rs.getString("senha")); // Imprime a senha obtida do banco de dados
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -68,7 +71,8 @@ public class GerenciadorDeUsuarios {
         try {
             conn = DataBaseConnection.getConnection();
             String sql =
-                "UPDATE clientes SET nome = ?, telefone = ?, email = ?, cidade = ?, estado = ?, endereco = ? WHERE nome = ?";
+                "UPDATE clientes SET nome = ?, telefone = ?, email = ?, cidade = ?, estado = ?, endereco = ? WHERE id = ?";
+
             pstmt = conn.prepareStatement(sql);
 
             pstmt.setString(1, usuario.get("nome"));
@@ -77,7 +81,7 @@ public class GerenciadorDeUsuarios {
             pstmt.setString(4, usuario.get("cidade"));
             pstmt.setString(5, usuario.get("estado"));
             pstmt.setString(6, usuario.get("endereco"));
-            pstmt.setString(7, usuario.get("nome"));
+            pstmt.setString(7, usuario.get("id"));
 
             pstmt.executeUpdate();
         } catch (SQLException ex) {

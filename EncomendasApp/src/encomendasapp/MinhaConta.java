@@ -13,17 +13,27 @@ import java.awt.event.ActionListener;
 
 public class MinhaConta extends JFrame {
     private EditarConta editarConta;
+    private JFrame janelaEncomendasApp;
+    private JFrame janelaPrincipal;
+    private JLabel adminLabel;
+    private JLabel nomeUsuarioLabel;
+    private JLabel telefoneLabel;
+    private JLabel emailLabel;
+    private JLabel cidadeLabel;
+    private JLabel estadoLabel;
+    private JLabel enderecoLabel;
 
-    public MinhaConta(Map<String, String> usuario) {
+    public MinhaConta(Map<String, String> usuario, JFrame janelaPrincipal) {
+        this.janelaPrincipal = janelaPrincipal;
 
         // Cria JLabels para exibir as informações do usuário
-        JLabel adminLabel = new JLabel("Admin: " + usuario.get("admin"));
-        JLabel nomeUsuarioLabel = new JLabel("Nome: " + usuario.get("nome"));
-        JLabel telefoneLabel = new JLabel("Telefone: " + usuario.get("telefone"));
-        JLabel emailLabel = new JLabel("Email: " + usuario.get("email"));
-        JLabel cidadeLabel = new JLabel("Cidade: " + usuario.get("cidade"));
-        JLabel estadoLabel = new JLabel("Estado: " + usuario.get("estado"));
-        JLabel enderecoLabel = new JLabel("Endereço: " + usuario.get("endereco"));
+        adminLabel = new JLabel("Administrador: " + usuario.get("admin"));
+        nomeUsuarioLabel = new JLabel("Nome: " + usuario.get("nome"));
+        telefoneLabel = new JLabel("Telefone: " + usuario.get("telefone"));
+        emailLabel = new JLabel("Email: " + usuario.get("email"));
+        cidadeLabel = new JLabel("Cidade: " + usuario.get("cidade"));
+        estadoLabel = new JLabel("Estado: " + usuario.get("estado"));
+        enderecoLabel = new JLabel("Endereço: " + usuario.get("endereco"));
 
         // Estiliza os JLabels
         adminLabel.setFont(new Font("Arial", Font.BOLD, 14));
@@ -64,14 +74,19 @@ public class MinhaConta extends JFrame {
 
         JButton editarButton = new JButton("Editar");
         editarButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        final Map<String, String>[] usuarioArray = new Map[] { usuario };
+        final Map<String, String> usuarioFinal = usuario;
+        final JFrame janelaEncomendasAppFinal = janelaEncomendasApp;
 
         editarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (editarConta == null || !editarConta.isVisible()) {
-                    editarConta = new EditarConta(usuarioArray);
+                // Verifica se a janela já está aberta
+                if (editarConta != null && editarConta.isVisible()) {
+                    editarConta.toFront();
+                    editarConta.repaint();
+                } else {
+                    // Cria e exibe a janela EditarConta
+                    editarConta = new EditarConta(usuarioFinal, MinhaConta.this, MinhaConta.this, janelaEncomendasAppFinal);
                     editarConta.setVisible(true);
                 }
             }
@@ -80,7 +95,6 @@ public class MinhaConta extends JFrame {
         // Adiciona o botão "Editar" ao JPanel
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(editarButton);
-
 
         // Adiciona o JPanel ao JFrame
         add(panel);
@@ -91,5 +105,15 @@ public class MinhaConta extends JFrame {
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+    }
+
+    public void atualizarCampos(Map<String, String> usuario) {
+        adminLabel.setText("Admin: " + usuario.get("admin"));
+        nomeUsuarioLabel.setText("Nome: " + usuario.get("nome"));
+        telefoneLabel.setText("Telefone: " + usuario.get("telefone"));
+        emailLabel.setText("Email: " + usuario.get("email"));
+        cidadeLabel.setText("Cidade: " + usuario.get("cidade"));
+        estadoLabel.setText("Estado: " + usuario.get("estado"));
+        enderecoLabel.setText("Endereço: " + usuario.get("endereco"));
     }
 }

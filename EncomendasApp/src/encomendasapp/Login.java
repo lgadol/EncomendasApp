@@ -73,16 +73,20 @@ public class Login extends JFrame {
                     JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos.");
                     return;
                 }
+                
                 try {
                     Connection conn = DataBaseConnection.getConnection();
                     PreparedStatement stmt = conn.prepareStatement("SELECT * FROM clientes WHERE email = ?");
                     stmt.setString(1, email);
                     ResultSet rs = stmt.executeQuery();
+                    
                     if (rs.next()) {
                         String storedPassword = rs.getString("senha");
                         int ativo = rs.getInt("ativo");
                         int admin = rs.getInt("admin");
                         String nomeUsuarioLogado = rs.getString("nome");
+                        int idUsuarioLogado = rs.getInt("id");
+                        
                         if (storedPassword == null) {
                             PreparedStatement updateStmt =
                                 conn.prepareStatement("UPDATE clientes SET senha = ? WHERE email = ?");
@@ -91,22 +95,29 @@ public class Login extends JFrame {
                             updateStmt.executeUpdate();
                             updateStmt.close();
                             JOptionPane.showMessageDialog(null, "Senha definida com sucesso. Fa�a login novamente.");
+                            
                         } else if (storedPassword.equals(password) && ativo == 1) {
                             JOptionPane.showMessageDialog(null, "Bem-Vindo, " + nomeUsuarioLogado);
                             idUsuarioLogado = rs.getInt("id");
+                            
                             if (encomendasApp == null) {
-                                encomendasApp = new EncomendasApp(admin, nomeUsuarioLogado);
+                                encomendasApp = new EncomendasApp(admin, nomeUsuarioLogado, idUsuarioLogado);
                             }
+                            
                             if (rememberMeCheckBox.isSelected()) {
                                 rememberUser(email, password);
                             }
+                            
                             encomendasApp.setVisible(true);
                             dispose();
+                            
                         } else if (ativo == 0) {
                             JOptionPane.showMessageDialog(null, "Usu�rio desativado");
+                            
                         } else {
                             JOptionPane.showMessageDialog(null, "Dados incorretos");
                         }
+                        
                     } else {
                         JOptionPane.showMessageDialog(null, "Dados incorretos");
                     }

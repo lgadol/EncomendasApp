@@ -1,8 +1,12 @@
 package encomendasapp;
 
+import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import java.util.Map;
 
@@ -20,10 +24,19 @@ public class EditarConta extends JFrame {
     private JPasswordField senhaField;
     private static EditarConta instance = null;
     private GerenciadorDeUsuarios gerenciadorDeUsuarios;
+    private final MinhaConta minhaConta;
+    private JFrame janelaPrincipal;
+    private JFrame janelaEncomendasApp;
 
-    public EditarConta(final Map<String, String>[] usuarioArray) {
-        this.usuarioArray = usuarioArray;
+    public EditarConta(final Map<String, String> usuario, final MinhaConta minhaConta, JFrame janelaPrincipal,
+                       JFrame janelaEncomendasApp) {
+        this.usuarioArray = new Map[] { usuario };
         this.gerenciadorDeUsuarios = new GerenciadorDeUsuarios();
+        this.minhaConta = minhaConta;
+        this.janelaPrincipal = janelaPrincipal;
+        final JFrame janelaPrincipalFinal = janelaPrincipal;
+        this.janelaEncomendasApp = janelaEncomendasApp;
+        final JFrame janelaEncomendasAppFinal = janelaEncomendasApp;
 
         // Cria JTextFields para a edição dos dados do usuário
         adminField = new JTextField(usuarioArray[0].get("admin"));
@@ -54,11 +67,20 @@ public class EditarConta extends JFrame {
         panel.add(estadoField);
         panel.add(new JLabel("Endereço:"));
         panel.add(enderecoField);
-        panel.add(new JLabel("Senha:"));
+        panel.add(new JLabel("Confirme com sua Senha:"));
         panel.add(senhaField);
 
         // Cria um botão "Salvar"
         JButton salvarButton = new JButton("Salvar");
+        salvarButton.setBackground(new Color(0, 204, 51));
+        ImageIcon iconSalvar = new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\salvar2.png");
+        
+        Image imgSalvar = iconSalvar.getImage();
+        Image resizedImgSalvar = imgSalvar.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+        
+        ImageIcon resizedIconSalvar = new ImageIcon(resizedImgSalvar);
+        salvarButton.setIcon(resizedIconSalvar);
+        
         salvarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -72,15 +94,12 @@ public class EditarConta extends JFrame {
 
                 // Verifica a senha
                 String senha = new String(senhaField.getPassword()).trim();
-                
-                System.out.println("Senha inserida: " + senha);  // Imprime a senha inserida
-            
-                System.out.println("Senha no array: " + usuarioArray[0].get("senha"));  // Imprime a senha no array
+
                 if (!senha.equals(usuarioArray[0].get("senha"))) {
                     JOptionPane.showMessageDialog(null, "Senha incorreta!");
                     return;
                 }
-                
+
                 SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
                     @Override
                     protected Void doInBackground() throws Exception {
@@ -93,6 +112,8 @@ public class EditarConta extends JFrame {
                     protected void done() {
                         // Fecha a janela de edição
                         dispose();
+                        // Atualiza os campos na janela MinhaConta
+                        minhaConta.atualizarCampos(usuarioArray[0]);
                     }
                 };
                 worker.execute();
@@ -111,14 +132,54 @@ public class EditarConta extends JFrame {
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                janelaPrincipalFinal.setEnabled(true);
+                janelaEncomendasAppFinal.setEnabled(true);
+            }
+        });
+
+        JButton fecharButton = new JButton("Fechar");
+        fecharButton.setBackground(new Color(255, 51, 0));
+        ImageIcon iconFechar = new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\fechar.png");
+        
+        Image imgFechar = iconFechar.getImage();
+        Image resizedImgFechar = imgFechar.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+        
+        ImageIcon resizedIconFechar = new ImageIcon(resizedImgFechar);
+        fecharButton.setIcon(resizedIconFechar);
+        
+        fecharButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Fecha a janela quando o botão "Fechar" é pressionado
+                dispose();
+            }
+        });
+        panel.add(fecharButton);
     }
 
-    public static EditarConta getInstance(final Map<String, String>[] usuarioArray) {
-        if (instance == null) {
-            instance = new EditarConta(usuarioArray);
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        if (janelaPrincipal != null) {
+            janelaPrincipal.setEnabled(!b);
+        }
+        if (janelaEncomendasApp != null) {
+            janelaEncomendasApp.setEnabled(!b);
+        }
+    }
+
+    public static EditarConta getInstance(final Map<String, String> usuario, MinhaConta minhaConta,
+                                          JFrame janelaPrincipal, JFrame janelaEncomendasApp) {
+        if (instance == null || !instance.isVisible()) {
+            instance = new EditarConta(usuario, minhaConta, janelaPrincipal, janelaEncomendasApp);
         }
         return instance;
     }
+
 }
 
 

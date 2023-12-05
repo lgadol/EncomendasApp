@@ -23,10 +23,14 @@ public class EncomendasApp extends JFrame {
     private JPanel panel;
     private JPanel buttonPanel;
     private MinhaConta minhaConta;
+    private int idUsuarioLogado;
+    private Map<String, String> usuario;
 
-    public EncomendasApp(int admin, String nomeUsuarioLogado) {
+    public EncomendasApp(int admin, String nomeUsuarioLogado, int idUsuarioLogado) {
         this.admin = admin;
         this.nomeUsuarioLogado = nomeUsuarioLogado;
+        this.idUsuarioLogado = idUsuarioLogado;
+        this.usuario = new GerenciadorDeUsuarios().obterUsuarioDoBancoDeDados(idUsuarioLogado);
 
         nomeUsuarioLabel = new JLabel("<html>" + "Bem-vindo," + "<br>" + nomeUsuarioLogado + "!" + "<html>");
         nomeUsuarioLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -161,7 +165,7 @@ public class EncomendasApp extends JFrame {
                 GerenciadorDeUsuarios gerenciadorDeUsuarios = new GerenciadorDeUsuarios();
 
                 // Obtem as informações do usuário do banco de dados
-                Map<String, String> usuario = gerenciadorDeUsuarios.obterUsuarioDoBancoDeDados(nomeUsuarioLogado);
+                Map<String, String> usuario = gerenciadorDeUsuarios.obterUsuarioDoBancoDeDados(idUsuarioLogado);
 
                 // Verifica se a janela já está aberta
                 if (minhaConta != null && minhaConta.isVisible()) {
@@ -169,7 +173,8 @@ public class EncomendasApp extends JFrame {
                     minhaConta.repaint();
                 } else {
                     // Cria e exibe a janela MinhaConta
-                    minhaConta = new MinhaConta(usuario);
+                    minhaConta =
+                            new MinhaConta(usuario, EncomendasApp.this); // Aqui você passa a instância atual de EncomendasApp
                     minhaConta.setVisible(true);
                 }
             }
@@ -196,7 +201,6 @@ public class EncomendasApp extends JFrame {
         JPanel logoffButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         logoffButtonPanel.add(logoffButton);
         buttonPanel.add(logoffButtonPanel);
-
 
         ImageIcon iconSair =
             IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\sair.png",
@@ -234,4 +238,5 @@ public class EncomendasApp extends JFrame {
         panel.add(buttonPanel, BorderLayout.CENTER);
         buttonPanel.add(Box.createVerticalGlue());
     }
+
 }
