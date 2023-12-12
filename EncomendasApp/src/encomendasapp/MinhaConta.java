@@ -26,14 +26,14 @@ public class MinhaConta extends JFrame {
     public MinhaConta(Map<String, String> usuario, JFrame janelaPrincipal) {
         this.janelaPrincipal = janelaPrincipal;
 
-        // Cria JLabels para exibir as informa√ß√µes do usu√°rio
+        // Cria JLabels para exibir as informaÁıes do usu·rio
         adminLabel = new JLabel("Administrador: " + usuario.get("admin"));
         nomeUsuarioLabel = new JLabel("Nome: " + usuario.get("nome"));
         telefoneLabel = new JLabel("Telefone: " + usuario.get("telefone"));
         emailLabel = new JLabel("Email: " + usuario.get("email"));
         cidadeLabel = new JLabel("Cidade: " + usuario.get("cidade"));
         estadoLabel = new JLabel("Estado: " + usuario.get("estado"));
-        enderecoLabel = new JLabel("Endere√ßo: " + usuario.get("endereco"));
+        enderecoLabel = new JLabel("EndereÁo: " + usuario.get("endereco"));
 
         // Estiliza os JLabels
         adminLabel.setFont(new Font("Arial", Font.BOLD, 14));
@@ -80,19 +80,18 @@ public class MinhaConta extends JFrame {
         editarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Verifica se a janela j√° est√° aberta
-                if (editarConta != null && editarConta.isVisible()) {
-                    editarConta.toFront();
-                    editarConta.repaint();
-                } else {
-                    // Cria e exibe a janela EditarConta
-                    editarConta = new EditarConta(usuarioFinal, MinhaConta.this, MinhaConta.this, janelaEncomendasAppFinal);
-                    editarConta.setVisible(true);
-                }
+                // Verifica se a janela j· est· aberta
+                    if (editarConta == null) {
+                        editarConta = new EditarConta(usuarioFinal, MinhaConta.this, MinhaConta.this, janelaEncomendasAppFinal);
+                        editarConta.setVisible(true);
+                    } else {
+                        editarConta.toFront();
+                        editarConta.repaint();
+                    }
             }
         });
 
-        // Adiciona o bot√£o "Editar" ao JPanel
+        // Adiciona o bot„o "Editar" ao JPanel
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(editarButton);
 
@@ -106,6 +105,10 @@ public class MinhaConta extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
     }
+    
+    public void setEditarContaNull() {
+        this.editarConta = null;
+    }
 
     public void atualizarCampos(Map<String, String> usuario) {
         adminLabel.setText("Admin: " + usuario.get("admin"));
@@ -114,6 +117,6 @@ public class MinhaConta extends JFrame {
         emailLabel.setText("Email: " + usuario.get("email"));
         cidadeLabel.setText("Cidade: " + usuario.get("cidade"));
         estadoLabel.setText("Estado: " + usuario.get("estado"));
-        enderecoLabel.setText("Endere√ßo: " + usuario.get("endereco"));
+        enderecoLabel.setText("EndereÁo: " + usuario.get("endereco"));
     }
 }

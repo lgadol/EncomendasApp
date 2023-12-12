@@ -65,7 +65,7 @@
       </list>
    </hash>
    <hash n="oracle.jdeveloper.compiler.OjcConfiguration">
-      <value n="internalEncoding" v="UTF-8"/>
+      <value n="internalEncoding" v="Cp1252"/>
       <value n="webIANAEncoding" v="UTF-8"/>
    </hash>
    <hash n="oracle.jdeveloper.runner.RunConfigurations">
