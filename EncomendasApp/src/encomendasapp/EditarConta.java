@@ -188,11 +188,17 @@ public class EditarConta extends JFrame {
                     protected void done() {
                         // Fecha a janela de edição
                         dispose();
+
                         // Atualiza os campos na janela MinhaConta
                         minhaConta.atualizarCampos(usuarioArray[0]);
+
                         JOptionPane.showMessageDialog(null, "Dados atualizados com sucesso!");
+
                         // Habilita a janela MinhaConta
                         minhaConta.setEnabled(true);
+
+                        // Define a instância de EditarConta como null na janela MinhaConta
+                        setEditarContaInMinhaContaNullOnClose();
                     }
                 };
                 worker.execute();
@@ -215,15 +221,17 @@ public class EditarConta extends JFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                minhaConta.setEditarContaNull();
                 if (janelaPrincipalFinal != null) {
                     janelaPrincipalFinal.setEnabled(true);
                 }
                 if (janelaEncomendasAppFinal != null) {
                     janelaEncomendasAppFinal.setEnabled(true);
                 }
-                instance = null;
+                instance = null; // Adicione esta linha
             }
         });
+        setEditarContaInMinhaContaNullOnClose();
     }
 
     @Override
@@ -263,7 +271,7 @@ public class EditarConta extends JFrame {
             e.printStackTrace();
         }
     }
-    
+
     public void setEditarContaInMinhaContaNullOnClose() {
         this.addWindowListener(new WindowAdapter() {
             @Override
