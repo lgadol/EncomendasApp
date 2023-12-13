@@ -59,7 +59,7 @@ public class EditarConta extends JFrame {
         ImageIcon iconeVisto =
             new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\marca-de-verificacao.png");
         ImageIcon iconeX =
-            new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\marca-de-verificacao.png");
+            new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\fechar2.png");
         
         iconeVisto = new ImageIcon(iconeVisto.getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT));
         iconeX = new ImageIcon(iconeX.getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT));

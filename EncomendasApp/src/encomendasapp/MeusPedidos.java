@@ -51,19 +51,24 @@ public class MeusPedidos extends JFrame implements AtualizarTabela {
         addIcon = new ImageIcon(addImage);
 
         // Botão Limpar Registros
-        clearButton = new JButton("Limpar Registros");
-        ImageIcon clearIcon =
-            new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\deletar-lixeira.png");
-        Image clearImage = clearIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-        clearButton.setBackground(new Color(255, 51, 0));
-        clearIcon = new ImageIcon(clearImage);
+        if (admin == 1) {
+            clearButton = new JButton("Limpar Registros");
+            ImageIcon clearIcon =
+                new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\deletar-lixeira.png");
+            Image clearImage = clearIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+            clearButton.setBackground(new Color(255, 51, 0));
+            clearIcon = new ImageIcon(clearImage);
+        } else {
+            // O usuário não é um administrador, então não cria o botão
+        }
 
         // Adicionando os botões
         addButton.setIcon(addIcon);
-        clearButton.setIcon(clearIcon);
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
         buttonPanel.add(addButton);
-        buttonPanel.add(clearButton);
+        if (clearButton != null) {
+            buttonPanel.add(clearButton);
+        }
         add(buttonPanel, BorderLayout.SOUTH);
 
         final AdicionarPedido[] adicionarPedidoWindow = new AdicionarPedido[1];
@@ -81,6 +86,7 @@ public class MeusPedidos extends JFrame implements AtualizarTabela {
             }
         });
 
+        if (clearButton != null) {
         clearButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -123,6 +129,7 @@ public class MeusPedidos extends JFrame implements AtualizarTabela {
                 }
             }
         });
+        }
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(500, 400);
