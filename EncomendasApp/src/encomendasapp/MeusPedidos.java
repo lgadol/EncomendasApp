@@ -42,7 +42,7 @@ public class MeusPedidos extends JFrame implements AtualizarTabela {
         dataTable = new JTable(new DefaultTableModel());
         add(new JScrollPane(dataTable), BorderLayout.CENTER);
 
-        // Bot√£o Adicionar Pedidos
+        // Botıes Adicionar Pedidos
         addButton = new JButton("Adicionar Pedido");
         ImageIcon addIcon =
             new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\adicionar-ao-carrinho.png");
@@ -50,7 +50,7 @@ public class MeusPedidos extends JFrame implements AtualizarTabela {
         addButton.setBackground(new Color(0, 204, 51));
         addIcon = new ImageIcon(addImage);
 
-        // Bot√£o Limpar Registros
+        // Bot„o Limpar Registros
         clearButton = new JButton("Limpar Registros");
         ImageIcon clearIcon =
             new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\deletar-lixeira.png");
@@ -58,7 +58,7 @@ public class MeusPedidos extends JFrame implements AtualizarTabela {
         clearButton.setBackground(new Color(255, 51, 0));
         clearIcon = new ImageIcon(clearImage);
 
-        // Adicionando os bot√µes
+        // Adicionando os botıes
         addButton.setIcon(addIcon);
         clearButton.setIcon(clearIcon);
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
