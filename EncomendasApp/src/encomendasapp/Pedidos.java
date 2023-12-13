@@ -106,7 +106,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                     stmt.close();
 
                     if (count == 0) {
-                        // Se nï¿½o houver registros, mostra uma mensagem
+                        // Se não houver registros, mostra uma mensagem
                         JOptionPane.showMessageDialog(null, "Não há nenhum pedido para excluir");
                     } else {
                         // Se houver registros, mostra um diálogo de confirmação
