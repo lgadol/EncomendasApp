@@ -157,30 +157,30 @@ public class EncomendasApp extends JFrame {
         minhaContaButton.setBackground(new Color(141, 218, 253));
         minhaContaButton.setForeground(Color.BLACK);
 
-        // Adiciona um ActionListener ao bot√£o "Minha Conta"
+        // Adiciona um ActionListener ao bot„o "Minha Conta"
         minhaContaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Cria uma inst√¢ncia de GerenciadorDeUsuarios
+                // Cria uma inst‚ncia de GerenciadorDeUsuarios
                 GerenciadorDeUsuarios gerenciadorDeUsuarios = new GerenciadorDeUsuarios();
 
-                // Obtem as informa√ß√µes do usu√°rio do banco de dados
+                // Obtem as informaÁıes do usu·rio do banco de dados
                 Map<String, String> usuario = gerenciadorDeUsuarios.obterUsuarioDoBancoDeDados(idUsuarioLogado);
 
-                // Verifica se a janela j√° est√° aberta
+                // Verifica se a janela j· est· aberta
                 if (minhaConta != null && minhaConta.isVisible()) {
                     minhaConta.toFront();
                     minhaConta.repaint();
                 } else {
                     // Cria e exibe a janela MinhaConta
                     minhaConta =
-                            new MinhaConta(usuario, EncomendasApp.this); // Aqui voc√™ passa a inst√¢ncia atual de EncomendasApp
+                            new MinhaConta(usuario, EncomendasApp.this); // Aqui vocÍ passa a inst‚ncia atual de EncomendasApp
                     minhaConta.setVisible(true);
                 }
             }
         });
 
-        // Cria um JPanel para o bot√£o "Minha Conta" e adiciona o bot√£o a este painel
+        // Cria um JPanel para o bot„o "Minha Conta" e adiciona o bot„o a este painel
         JPanel minhaContaButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         minhaContaButtonPanel.add(minhaContaButton);
         ImageIcon iconMinhaConta =
@@ -188,7 +188,7 @@ public class EncomendasApp extends JFrame {
                                    20, 20);
         minhaContaButton.setIcon(iconMinhaConta);
 
-        // Adiciona o painel do bot√£o "Minha Conta" ao painel de bot√µes
+        // Adiciona o painel do bot„o "Minha Conta" ao painel de botıes
         buttonPanel.add(minhaContaButtonPanel);
 
         logoffButton = new JButton("Sair");
@@ -211,20 +211,10 @@ public class EncomendasApp extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Fecha todas as janelas
-                if (minhaConta != null && minhaConta.isVisible()) {
-                    minhaConta.dispose();
-                }
-                if (clientes != null) {
-                    clientes.dispose();
-                }
-                if (pedidos != null) {
-                    pedidos.dispose();
-                }
-                if (meusPedidos != null) {
-                    meusPedidos.dispose();
+                for (Window window : Window.getWindows()) {
+                    window.dispose();
                 }
                 // Abre a tela de login
-                dispose();
                 new Login().setVisible(true);
             }
         });

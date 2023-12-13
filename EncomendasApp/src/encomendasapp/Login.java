@@ -94,7 +94,7 @@ public class Login extends JFrame {
                             updateStmt.setString(2, email);
                             updateStmt.executeUpdate();
                             updateStmt.close();
-                            JOptionPane.showMessageDialog(null, "Senha definida com sucesso. Faï¿½a login novamente.");
+                            JOptionPane.showMessageDialog(null, "Senha definida com sucesso. Faça login novamente.");
                             
                         } else if (storedPassword.equals(password) && ativo == 1) {
                             JOptionPane.showMessageDialog(null, "Bem-Vindo, " + nomeUsuarioLogado);
@@ -112,7 +112,7 @@ public class Login extends JFrame {
                             dispose();
                             
                         } else if (ativo == 0) {
-                            JOptionPane.showMessageDialog(null, "Usuï¿½rio desativado");
+                            JOptionPane.showMessageDialog(null, "Usuário desativado");
                             
                         } else {
                             JOptionPane.showMessageDialog(null, "Dados incorretos");

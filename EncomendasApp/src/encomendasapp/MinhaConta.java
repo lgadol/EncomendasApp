@@ -1,5 +1,6 @@
 package encomendasapp;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 
@@ -10,6 +11,9 @@ import javax.swing.*;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 
 public class MinhaConta extends JFrame {
     private EditarConta editarConta;
@@ -26,8 +30,26 @@ public class MinhaConta extends JFrame {
     public MinhaConta(Map<String, String> usuario, JFrame janelaPrincipal) {
         this.janelaPrincipal = janelaPrincipal;
 
+        ImageIcon iconeVisto =
+            new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\marca-de-verificacao.png");
+        ImageIcon iconeX =
+            new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\marca-de-verificacao.png");
+
+        // Redimensiona os ícones para 15x15
+        iconeVisto = new ImageIcon(iconeVisto.getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT));
+        iconeX = new ImageIcon(iconeX.getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT));
+
         // Cria JLabels para exibir as informações do usuário
-        adminLabel = new JLabel("Administrador: " + usuario.get("admin"));
+        String admin = usuario.get("admin");
+        if (admin.equals("1")) {
+            adminLabel = new JLabel("Administrador: ");
+            adminLabel.setIcon(iconeVisto);
+            adminLabel.setHorizontalTextPosition(JLabel.LEFT);
+        } else {
+            adminLabel = new JLabel("Administrador: ");
+            adminLabel.setIcon(iconeX);
+            adminLabel.setHorizontalTextPosition(JLabel.LEFT);
+        }
         nomeUsuarioLabel = new JLabel("Nome: " + usuario.get("nome"));
         telefoneLabel = new JLabel("Telefone: " + usuario.get("telefone"));
         emailLabel = new JLabel("Email: " + usuario.get("email"));
@@ -73,7 +95,11 @@ public class MinhaConta extends JFrame {
         enderecoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JButton editarButton = new JButton("Editar");
+        editarButton.setBackground(new Color(0, 153, 255));
+        editarButton.setOpaque(true);
+        editarButton.setBorderPainted(false);
         editarButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
         final Map<String, String> usuarioFinal = usuario;
         final JFrame janelaEncomendasAppFinal = janelaEncomendasApp;
 
@@ -81,15 +107,19 @@ public class MinhaConta extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Verifica se a janela já está aberta
-                    if (editarConta == null) {
-                        editarConta = new EditarConta(usuarioFinal, MinhaConta.this, MinhaConta.this, janelaEncomendasAppFinal);
-                        editarConta.setVisible(true);
-                    } else {
-                        editarConta.toFront();
-                        editarConta.repaint();
-                    }
+                if (editarConta == null) {
+                    editarConta =
+                            new EditarConta(usuarioFinal, MinhaConta.this, MinhaConta.this, janelaEncomendasAppFinal);
+                    editarConta.setVisible(true);
+                } else {
+                    editarConta.toFront();
+                    editarConta.repaint();
+                }
             }
         });
+
+        // Adiciona um Box.Filler ao JPanel
+        panel.add(new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, Integer.MAX_VALUE)));
 
         // Adiciona o botão "Editar" ao JPanel
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -105,7 +135,7 @@ public class MinhaConta extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
     }
-    
+
     public void setEditarContaNull() {
         this.editarConta = null;
     }

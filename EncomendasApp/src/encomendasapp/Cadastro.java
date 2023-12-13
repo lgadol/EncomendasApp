@@ -44,7 +44,7 @@ public class Cadastro extends JFrame {
         cadastrarButton.setBackground(new Color(0, 153, 255));
         cancelButton.setBackground(new Color(255, 51, 0));
 
-        // Adicionando os campos ao painel do formulÃ¡rio
+        // Adicionando os campos ao painel do formulário
         formPanel.add(new JLabel("Nome:"));
         formPanel.add(nomeField);
         formPanel.add(new JLabel("Telefone:"));
@@ -59,10 +59,10 @@ public class Cadastro extends JFrame {
         formPanel.add(enderecoField);
         formPanel.add(new JLabel("Senha:"));
         formPanel.add(senhaField);
-        formPanel.add(new JLabel("Confirmaï¿½ï¿½o de Senha:"));
+        formPanel.add(new JLabel("Confirmação de Senha:"));
         formPanel.add(confirmaSenhaField);
 
-        // Adicionando os botÃµes ao painel de botÃµes
+        // Adicionando os botões ao painel
         buttonPanel.add(cancelButton);
         buttonPanel.add(cadastrarButton);
 
@@ -82,56 +82,56 @@ public class Cadastro extends JFrame {
                 String senha = new String(((JPasswordField)senhaField).getPassword());
                 String confirmaSenha = new String(((JPasswordField)confirmaSenhaField).getPassword());
 
-                // ValidaÃ§Ã£o dos campos obrigatÃ³rios
+                // Validação dos campos obrigatórios
                 if (nome.isEmpty() || telefone.isEmpty() || email.isEmpty() || senha.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos obrigatï¿½rios.");
+                    JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos obrigatórios.");
                     return;
                 }
 
-                // ValidaÃ§Ã£o de email
+                // Validação de email
                 Pattern patternEmail = Pattern.compile("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)*(\\.[a-zA-Z]{2,})$");
                 Matcher matcherEmail = patternEmail.matcher(email);
                 if (!matcherEmail.find()) {
-                    JOptionPane.showMessageDialog(null, "Email invï¿½lido");
+                    JOptionPane.showMessageDialog(null, "Email inválido");
                     return;
                 }
 
-                // ValidaÃ§Ã£o de telefone
+                // Validação de telefone
                 Pattern patternTelefone = Pattern.compile("^\\d{2} \\d{8,9}$");
                 Matcher matcherTelefone = patternTelefone.matcher(telefone);
                 if (!matcherTelefone.find()) {
-                    JOptionPane.showMessageDialog(null, "Telefone invï¿½lido, digite no formato 'DD + nï¿½mero' ");
+                    JOptionPane.showMessageDialog(null, "Telefone inválido, digite no formato 'DD + número' ");
                     return;
                 }
 
-                // ValidaÃ§Ã£o da senha
+                // Validação da senha
                 if (!senha.equals(confirmaSenha)) {
-                    JOptionPane.showMessageDialog(null, "As senhas nï¿½o coincidem.");
+                    JOptionPane.showMessageDialog(null, "As senhas não coincidem.");
                     return;
                 }
 
-                // Conexï¿½o com o banco de dados e inserï¿½ï¿½o dos dados
+                // Conexão com o banco de dados e inserção dos dados
                 try {
                     Connection con = DataBaseConnection.getConnection();
 
-                    // Verificar se o email jÃ¡ existe
+                    // Verificar se o email já existe
                     PreparedStatement checkEmailStmt = con.prepareStatement("SELECT * FROM clientes WHERE email = ?");
                     checkEmailStmt.setString(1, email);
                     ResultSet checkEmailRs = checkEmailStmt.executeQuery();
                     if (checkEmailRs.next()) {
-                        JOptionPane.showMessageDialog(null, "Este email jï¿½ estï¿½ sendo usado por outro cliente.");
+                        JOptionPane.showMessageDialog(null, "Este email já está sendo usado por outro cliente.");
                         return;
                     }
                     checkEmailRs.close();
                     checkEmailStmt.close();
 
-                    // Verificar se o telefone jï¿½ existe
+                    // Verificar se o telefone já existe
                     PreparedStatement checkTelefoneStmt =
                         con.prepareStatement("SELECT * FROM clientes WHERE telefone = ?");
                     checkTelefoneStmt.setString(1, telefone);
                     ResultSet checkTelefoneRs = checkTelefoneStmt.executeQuery();
                     if (checkTelefoneRs.next()) {
-                        JOptionPane.showMessageDialog(null, "Este telefone jï¿½ estï¿½ sendo usado por outro cliente.");
+                        JOptionPane.showMessageDialog(null, "Este telefone já está sendo usado por outro cliente.");
                         return;
                     }
                     checkTelefoneRs.close();

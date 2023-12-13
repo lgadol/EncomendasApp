@@ -7,7 +7,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
-
 import java.awt.event.MouseEvent;
 
 import java.math.BigDecimal;
@@ -44,7 +43,7 @@ public class Clientes extends JFrame implements AtualizarTabela {
         columnNames.add("Estado");
         columnNames.add("Endereco");
 
-        // Bot√£o Adicionar Clientes
+        // Bot„o Adicionar Clientes
         addButton = new JButton("Adicionar Cliente");
         ImageIcon addIcon =
             new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\adicionar-usuario.png");
@@ -52,7 +51,7 @@ public class Clientes extends JFrame implements AtualizarTabela {
         addButton.setBackground(new Color(0, 204, 51));
         addIcon = new ImageIcon(addImage);
 
-        // Bot√£o Limpar Registros
+        // Bot„o Limpar Registros
         clearButton = new JButton("Limpar Registros");
         ImageIcon clearIcon =
             new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\deletar-lixeira.png");
@@ -98,7 +97,7 @@ public class Clientes extends JFrame implements AtualizarTabela {
                     stmt.close();
 
                     if (count == 0) {
-                        // Se n√£o houver registros, mostra uma mensagem
+                        // Se n„o houver registros, mostra uma mensagem
                         JOptionPane.showMessageDialog(null, "N„o h· nenhum cliente para excluir");
                     } else {
                         // Se houver registros, mostra um di·logo de confirmaÁ„o
@@ -138,7 +137,7 @@ public class Clientes extends JFrame implements AtualizarTabela {
                     new EditarCliente(clienteID).setVisible(true);
                 }
                 if (mouseEvent.getButton() == MouseEvent.BUTTON3) {
-                    // Verifica se o bot√£o direito do mouse foi pressionado
+                    // Verifica se o bot„o direito do mouse foi pressionado
                     JPopupMenu popupMenu = new JPopupMenu();
                     JMenuItem menuItemEdit = new JMenuItem("Editar");
                     JMenuItem menuItemDelete = new JMenuItem("Excluir");
@@ -206,6 +205,43 @@ public class Clientes extends JFrame implements AtualizarTabela {
 
     private static final Logger LOGGER = Logger.getLogger(EditarCliente.class.getName());
 
+    private class CustomTableModel extends DefaultTableModel {
+        public CustomTableModel(Vector<Vector<Object>> data, Vector<String> columnNames) {
+            super(data, columnNames);
+        }
+
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            switch (columnIndex) {
+            case 1: // Segunda coluna
+            case 2: // Terceira coluna
+                return Icon.class;
+            default:
+                return super.getColumnClass(columnIndex);
+            }
+        }
+
+        @Override
+        public Object getValueAt(int row, int column) {
+            if (column == 1 || column == 2) {
+                Object value = super.getValueAt(row, column);
+                ImageIcon icon;
+                if (value instanceof Number && ((Number)value).intValue() == 1) {
+                    icon =
+new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\marca-de-verificacao.png");
+                } else {
+                    icon =
+new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\fechar2.png");
+                }
+                Image img = icon.getImage();
+                Image resizedImage = img.getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
+                return new ImageIcon(resizedImage);
+            } else {
+                return super.getValueAt(row, column);
+            }
+        }
+    }
+
     public class EditarCliente extends JFrame {
 
         private int clienteID;
@@ -251,7 +287,7 @@ public class Clientes extends JFrame implements AtualizarTabela {
             panel.add(campoCidade);
             panel.add(new JLabel("Estado"));
             panel.add(campoEstado);
-            panel.add(new JLabel("Endere√ßo"));
+            panel.add(new JLabel("EndereÁo"));
             panel.add(campoEndereco);
 
             // Inicialize e adicione o bot„o Resetar Senha
@@ -356,7 +392,7 @@ public class Clientes extends JFrame implements AtualizarTabela {
                 return;
             }
 
-            // Valida√ß√£o de telefone
+            // ValidaÁ„o de telefone
             Pattern patternTelefone = Pattern.compile("^\\d{2} \\d{8,9}$");
             Matcher matcherTelefone = patternTelefone.matcher(campoTelefone.getText());
             if (!matcherTelefone.find()) {

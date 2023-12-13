@@ -55,10 +55,24 @@ public class EditarConta extends JFrame {
         final JFrame janelaPrincipalFinal = janelaPrincipal;
         this.janelaEncomendasApp = janelaEncomendasApp;
         final JFrame janelaEncomendasAppFinal = janelaEncomendasApp;
-
-        // Cria JTextFields para a edição dos dados do usuário
-        adminField = new JTextField(usuarioArray[0].get("admin"));
-        adminField.setEditable(false);
+        
+        ImageIcon iconeVisto =
+            new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\marca-de-verificacao.png");
+        ImageIcon iconeX =
+            new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\marca-de-verificacao.png");
+        
+        iconeVisto = new ImageIcon(iconeVisto.getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT));
+        iconeX = new ImageIcon(iconeX.getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT));
+        
+        // Cria JLabels para exibir as informações do usuário
+        String admin = usuarioArray[0].get("admin");
+        JLabel adminLabel;
+        if (admin.equals("1")) {
+            adminLabel = new JLabel(iconeVisto);
+        } else {
+            adminLabel = new JLabel(iconeX);
+        }
+        
         nomeUsuarioField = new JTextField(usuarioArray[0].get("nome"));
         telefoneField = new JTextField(usuarioArray[0].get("telefone"));
         emailField = new JTextField(usuarioArray[0].get("email"));
@@ -73,7 +87,7 @@ public class EditarConta extends JFrame {
 
         // Adiciona os JTextFields ao JPanel
         panel.add(new JLabel("Admin:"));
-        panel.add(adminField);
+        panel.add(adminLabel);
         panel.add(new JLabel("Nome do usuário:"));
         panel.add(nomeUsuarioField);
         panel.add(new JLabel("Telefone:"));

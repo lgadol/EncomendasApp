@@ -40,12 +40,12 @@ public class Pedidos extends JFrame implements AtualizarTabela {
         columnNames.add("Pago");
         columnNames.add("Pagamento Adiantado");
         columnNames.add("Tipo de Pagamento");
-        columnNames.add("Preï¿½o Pago");
+        columnNames.add("Preço Pago");
         columnNames.add("Quilos");
-        columnNames.add("Preï¿½o por Kg");
+        columnNames.add("Preço por Kg");
         columnNames.add("Data da Encomenda");
 
-        // Botï¿½o Adicionar Pedidos
+        // Botão Adicionar Pedidos
         addButton = new JButton("Adicionar Pedido");
         ImageIcon addIcon =
             new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\adicionar-ao-carrinho.png");
@@ -53,7 +53,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
         addButton.setBackground(new Color(0, 204, 51));
         addIcon = new ImageIcon(addImage);
 
-        // Botï¿½o Limpar Registros
+        // Botão Limpar Registros
         clearButton = new JButton("Limpar Registros");
         ImageIcon clearIcon =
             new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\deletar-lixeira.png");
@@ -61,7 +61,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
         clearButton.setBackground(new Color(255, 51, 0));
         clearIcon = new ImageIcon(clearImage);
 
-        // Adicionando os botï¿½es
+        // Adicionando os botões
         addButton.setIcon(addIcon);
         clearButton.setIcon(clearIcon);
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
@@ -69,7 +69,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
         buttonPanel.add(clearButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // Remova todos os ouvintes de aï¿½ï¿½o existentes
+        // Remova todos os ouvintes existentes
         for (ActionListener al : addButton.getActionListeners()) {
             addButton.removeActionListener(al);
         }
@@ -79,7 +79,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LOGGER.info("Seu mï¿½todo foi chamado");
+                LOGGER.info("Seu método foi chamado");
                 if (adicionarPedidoWindow[0] == null || !adicionarPedidoWindow[0].isVisible()) {
                     adicionarPedidoWindow[0] = new AdicionarPedido(admin, nomeUsuarioLogado, Pedidos.this);
                     adicionarPedidoWindow[0].setVisible(true);
@@ -87,7 +87,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                     adicionarPedidoWindow[0].toFront();
                     adicionarPedidoWindow[0].repaint();
                 }
-                // Atualiza a tabela apï¿½s adicionar o pedido
+                // Atualiza a tabela após adicionar o pedido
                 atualizarDadosTabela();
             }
         });
@@ -107,12 +107,12 @@ public class Pedidos extends JFrame implements AtualizarTabela {
 
                     if (count == 0) {
                         // Se nï¿½o houver registros, mostra uma mensagem
-                        JOptionPane.showMessageDialog(null, "Nï¿½o hï¿½ nenhum pedido para excluir");
+                        JOptionPane.showMessageDialog(null, "Não há nenhum pedido para excluir");
                     } else {
-                        // Se houver registros, mostra um diï¿½logo de confirmaï¿½ï¿½o
+                        // Se houver registros, mostra um diálogo de confirmação
                         int confirm =
                             JOptionPane.showConfirmDialog(null, "Tem certeza de que deseja excluir todos os pedidos?",
-                                                          "Confirmaï¿½ï¿½o", JOptionPane.YES_NO_OPTION);
+                                                          "Confirmação", JOptionPane.YES_NO_OPTION);
                         if (confirm == JOptionPane.YES_OPTION) {
                             // Exclui todos os registros
                             PreparedStatement deleteStmt = conn.prepareStatement("DELETE FROM pedidos");
@@ -122,7 +122,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                     }
 
                     conn.close();
-                    // Atualiza a tabela apï¿½s todas as exclusï¿½es terem sido concluï¿½das
+                    // Atualiza a tabela após todas as exclusões terem sido concluídas
                     atualizarDadosTabela();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
@@ -143,7 +143,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                     // Obtenha o ID do pedido na linha selecionada. Supondo que o ID seja a primeira coluna da tabela.
                     int pedidoId = ((BigDecimal)dataTable.getValueAt(selectedRow[0], 0)).intValue();
 
-                    // Abra a janela de ediï¿½ï¿½o passando o ID do pedido
+                    // Abra a janela de edição passando o ID do pedido
                     new EditarPedido(pedidoId).setVisible(true);
                 }
                 if (mouseEvent.getButton() == MouseEvent.BUTTON3) {
@@ -157,7 +157,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                             // Obtenha o ID do pedido na linha selecionada. Supondo que o ID seja a primeira coluna da tabela.
                             int pedidoId = ((BigDecimal)dataTable.getValueAt(selectedRow[0], 0)).intValue();
 
-                            // Abra a janela de ediÃ§Ã£o passando o ID do pedido
+                            // Abra a janela de edição passando o ID do pedido
                             new EditarPedido(pedidoId).setVisible(true);
                         }
                     });
@@ -177,17 +177,17 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                                 // Cria um PreparedStatement para executar a query SQL
                                 PreparedStatement pstmt = conn.prepareStatement(sql);
 
-                                // Define o valor do parÃ¢metro na query SQL
+                                // Define o valor do parâmetro na query SQL
                                 pstmt.setInt(1, pedidoId);
 
                                 // Executa a query SQL
                                 pstmt.executeUpdate();
 
-                                // Fecha o PreparedStatement e a conexÃ£o
+                                // Fecha o PreparedStatement e a conexão
                                 pstmt.close();
                                 conn.close();
 
-                                // Atualiza a tabela apï¿½s a exclusï¿½o
+                                // Atualiza a tabela após a exclusão
                                 atualizarDadosTabela();
                             } catch (SQLException ex) {
                                 ex.printStackTrace();
@@ -209,11 +209,53 @@ public class Pedidos extends JFrame implements AtualizarTabela {
         setLocationRelativeTo(null);
         setVisible(true);
 
-        // Chame o mï¿½todo para preencher a tabela quando a janela for aberta
+        // Chame o método para preencher a tabela quando a janela for aberta
         atualizarDadosTabela();
     }
 
     private static final Logger LOGGER = Logger.getLogger(EditarPedido.class.getName());
+
+    private class CustomTableModel extends DefaultTableModel {
+        public CustomTableModel(Vector<Vector<Object>> data, Vector<String> columnNames) {
+            super(data, columnNames);
+        }
+
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            switch (columnIndex) {
+            case 5: // Quinta coluna
+            case 6: // Sexta coluna
+                return Icon.class;
+            default:
+                return super.getColumnClass(columnIndex);
+            }
+        }
+
+        @Override
+        public Object getValueAt(int row, int column) {
+            if (column == 5 || column == 6) {
+                Object value = super.getValueAt(row, column);
+                ImageIcon icon;
+                if (value instanceof Number && ((Number)value).intValue() == 1) {
+                    icon =
+new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\marca-de-verificacao.png");
+                } else {
+                    icon =
+new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\fechar2.png");
+                }
+                Image img = icon.getImage();
+                Image resizedImage = img.getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
+                return new ImageIcon(resizedImage);
+            } else if (column == 10) { // Décima coluna
+                Object value = super.getValueAt(row, column);
+                if (value instanceof Number) {
+                    Number number = (Number)value;
+                    return String.format("%.2f", number.doubleValue());
+                }
+            }
+            return super.getValueAt(row, column);
+        }
+    }
 
     public class EditarPedido extends JFrame {
         private int pedidoId;
@@ -237,8 +279,8 @@ public class Pedidos extends JFrame implements AtualizarTabela {
             campoCategoria = new JComboBox<>(new String[] { "GADO", "PORCO", "FRANGO", "OUTRO" });
             campoTipoCarne = new JTextField();
             campoTipoCorte = new JTextField();
-            campoPago = new JComboBox<>(new String[] { "SIM", "Nï¿½O" });
-            campoPagamentoAdiantado = new JComboBox<>(new String[] { "SIM", "Nï¿½O" });
+            campoPago = new JComboBox<>(new String[] { "SIM", "NÃO" });
+            campoPagamentoAdiantado = new JComboBox<>(new String[] { "SIM", "NÃO" });
             campoTipoPagamento = new JComboBox<>(new String[] { "DINHEIRO", "CREDITO", "DEBITO", "PIX", "OUTRO" });
             campoPrecoPago = new JTextField();
             campoKgs = new JTextField();
@@ -259,12 +301,12 @@ public class Pedidos extends JFrame implements AtualizarTabela {
             panel.add(campoPagamentoAdiantado);
             panel.add(new JLabel("Tipo de Pagamento"));
             panel.add(campoTipoPagamento);
-            panel.add(new JLabel("Preï¿½o Pago"));
+            panel.add(new JLabel("Preço Pago"));
             panel.add(campoPrecoPago);
             panel.add(new JLabel("Kgs"));
             panel.add(campoKgs);
 
-            // Inicialize e adicione o botï¿½o Salvar
+            // Inicialize e adicione o botão Salvar
             botaoSalvar = new JButton("Salvar");
             botaoSalvar.setBackground(new Color(0, 204, 51));
             panel.add(botaoSalvar);
@@ -295,8 +337,8 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                     campoCategoria.setSelectedItem(rs.getString("categoria"));
                     campoTipoCarne.setText(rs.getString("tipo_carne"));
                     campoTipoCorte.setText(rs.getString("tipo_corte"));
-                    campoPago.setSelectedItem(rs.getInt("pago") == 1 ? "SIM" : "Nï¿½O");
-                    campoPagamentoAdiantado.setSelectedItem(rs.getInt("pagamento_adiantado") == 1 ? "SIM" : "Nï¿½O");
+                    campoPago.setSelectedItem(rs.getInt("pago") == 1 ? "SIM" : "NÃO");
+                    campoPagamentoAdiantado.setSelectedItem(rs.getInt("pagamento_adiantado") == 1 ? "SIM" : "NÃO");
                     campoTipoPagamento.setSelectedItem(rs.getString("tipo_pagamento"));
                     campoPrecoPago.setText(rs.getString("preco_pago"));
                     campoKgs.setText(rs.getString("kgs"));
@@ -320,7 +362,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
             try {
                 LOGGER.info("Conectando ao banco de dados...");
                 Connection conn = DataBaseConnection.getConnection();
-                LOGGER.info("ConexÃ£o estabelecida.");
+                LOGGER.info("Conexão estabelecida.");
 
                 String sql =
                     "UPDATE pedidos SET nome_cliente = ?, categoria = ?, tipo_carne = ?, tipo_corte = ?, pago = ?, " +
@@ -338,19 +380,19 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                 pstmt.setString(9, campoKgs.getText().toUpperCase());
                 pstmt.setInt(10, pedidoId);
 
-                LOGGER.info("Executando a atualizaï¿½ï¿½o...");
+                LOGGER.info("Executando a atualização...");
                 pstmt.executeUpdate();
-                LOGGER.info("Atualizaï¿½ï¿½o executada.");
+                LOGGER.info("Atualização executada.");
                 pstmt.close();
 
                 conn.close();
             } catch (SQLException ex) {
-                LOGGER.severe("Uma exceï¿½ï¿½o SQLException foi lanï¿½ada.");
+                LOGGER.severe("Uma exceção SQLException foi lançada.");
                 ex.printStackTrace();
             }
             LOGGER.info("Finalizando salvarDadosPedido.");
 
-            // Feche a janela de ediï¿½ï¿½o
+            // Feche a janela de edição
             dispose();
 
             // Atualize a lista
@@ -358,8 +400,9 @@ public class Pedidos extends JFrame implements AtualizarTabela {
         }
     }
 
-    // Mï¿½todo para atualizar os dados da tabela
+    // Método para atualizar os dados da tabela
 
+    @Override
     public void atualizarDadosTabela() {
         Vector<Vector<Object>> data = new Vector<>();
         try {
@@ -373,7 +416,6 @@ public class Pedidos extends JFrame implements AtualizarTabela {
                 }
                 data.add(vector);
             }
-
             rs.close();
             stmt.close();
             conn.close();
@@ -381,8 +423,7 @@ public class Pedidos extends JFrame implements AtualizarTabela {
             ex.printStackTrace();
         }
 
-        // Atualiza os dados da tabela
-        DefaultTableModel model = (DefaultTableModel)dataTable.getModel();
-        model.setDataVector(data, columnNames);
+        // Atualiza o modelo da tabela
+        dataTable.setModel(new CustomTableModel(data, columnNames));
     }
 }

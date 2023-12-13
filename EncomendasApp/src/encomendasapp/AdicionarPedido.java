@@ -36,7 +36,7 @@ public class AdicionarPedido extends JFrame {
         precoPagoField = new JTextField();
         kgsField = new JTextField();
         confirmarButton = new JButton("Confirmar");
-        confirmarButton.setBackground(new Color(0, 204, 51)); // Muda a cor do botão para azul
+        confirmarButton.setBackground(new Color(0, 204, 51));
 
         // Habilita ou desabilita os campos com base no valor de admin
         nomeClienteField.setEnabled(admin == 1);
@@ -85,7 +85,7 @@ public class AdicionarPedido extends JFrame {
                 String precoPago = precoPagoField.getText();
                 String kgs = kgsField.getText();
 
-                // ValidaÃ§Ã£o dos campos obrigatÃ³rios
+                // Validação dos campos obrigatórios
                 if (nomeCliente.isEmpty() || categoria.isEmpty() || tipoCarne.isEmpty() || tipoPagamento.isEmpty() ||
                     kgs.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos obrigatórios.");

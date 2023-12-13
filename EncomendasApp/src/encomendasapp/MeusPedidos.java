@@ -134,8 +134,49 @@ public class MeusPedidos extends JFrame implements AtualizarTabela {
         atualizarDadosTabela();
     }
 
-    // Método para atualizar os dados da tabela
+    private class CustomTableModel extends DefaultTableModel {
+        public CustomTableModel(Vector<Vector<Object>> data, Vector<String> columnNames) {
+            super(data, columnNames);
+        }
 
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            switch (columnIndex) {
+            case 5: // Quinta coluna
+            case 6: // Sexta coluna
+                return Icon.class;
+            default:
+                return super.getColumnClass(columnIndex);
+            }
+        }
+
+        @Override
+        public Object getValueAt(int row, int column) {
+            if (column == 5 || column == 6) {
+                Object value = super.getValueAt(row, column);
+                ImageIcon icon;
+                if (value instanceof Number && ((Number)value).intValue() == 1) {
+                    icon =
+new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\marca-de-verificacao.png");
+                } else {
+                    icon =
+new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\fechar2.png");
+                }
+                Image img = icon.getImage();
+                Image resizedImage = img.getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
+                return new ImageIcon(resizedImage);
+            } else if (column == 10) { // Décima coluna
+                Object value = super.getValueAt(row, column);
+                if (value instanceof Number) {
+                    Number number = (Number)value;
+                    return String.format("%.2f", number.doubleValue());
+                }
+            }
+            return super.getValueAt(row, column);
+        }
+    }
+
+    @Override
     public void atualizarDadosTabela() {
         Vector<Vector<Object>> data = new Vector<>();
         try {
@@ -150,7 +191,6 @@ public class MeusPedidos extends JFrame implements AtualizarTabela {
                 }
                 data.add(vector);
             }
-
             rs.close();
             stmt.close();
             conn.close();
@@ -158,7 +198,8 @@ public class MeusPedidos extends JFrame implements AtualizarTabela {
             ex.printStackTrace();
         }
 
-        // Atualiza os dados da tabela
+        // Atualiza o modelo da tabela
+        dataTable.setModel(new CustomTableModel(data, columnNames));
         DefaultTableModel model = (DefaultTableModel)dataTable.getModel();
         model.setDataVector(data, columnNames);
     }
