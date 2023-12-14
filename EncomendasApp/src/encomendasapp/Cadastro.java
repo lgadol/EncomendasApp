@@ -42,7 +42,7 @@ public class Cadastro extends JFrame {
         cadastrarButton = new JButton("Cadastrar");
         cancelButton = new JButton("Cancelar");
 
-        // Alterando a cor dos bot√µes
+        // Alterando a cor dos botıes
         cadastrarButton.setBackground(new Color(0, 153, 255));
         cancelButton.setBackground(new Color(255, 51, 0));
 
