@@ -29,6 +29,7 @@ public class Clientes extends JFrame implements AtualizarTabela {
     private int isEditing = -1;
     private Vector<Vector<Object>> data = new Vector<>();
     private Vector<String> columnNames = new Vector<>();
+    private boolean isEditingWindowOpen = false;
 
     public Clientes() {
         setLayout(new BorderLayout());
@@ -131,24 +132,31 @@ public class Clientes extends JFrame implements AtualizarTabela {
                 selectedRow[0] = table.rowAtPoint(point);
                 if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
                     // Obtenha o ID do pedido na linha selecionada. Supondo que o ID seja a primeira coluna da tabela.
-                    int clienteID = ((BigDecimal)dataTable.getValueAt(selectedRow[0], 0)).intValue();
+                    if (!isEditingWindowOpen) {
+                        int clienteID = ((BigDecimal)dataTable.getValueAt(selectedRow[0], 0)).intValue();
 
-                    // Abra a janela de edição passando o ID do pedido
-                    new EditarCliente(clienteID).setVisible(true);
+                        // Abra a janela de edição passando o ID do pedido
+                        new EditarCliente(clienteID).setVisible(true);
+                        isEditingWindowOpen = true;
+                    }
                 }
                 if (mouseEvent.getButton() == MouseEvent.BUTTON3) {
                     // Verifica se o botão direito do mouse foi pressionado
                     JPopupMenu popupMenu = new JPopupMenu();
                     JMenuItem menuItemEdit = new JMenuItem("Editar");
                     JMenuItem menuItemDelete = new JMenuItem("Excluir");
+
                     menuItemEdit.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            // Obtenha o ID do pedido na linha selecionada. Supondo que o ID seja a primeira coluna da tabela.
-                            int clienteID = ((BigDecimal)dataTable.getValueAt(selectedRow[0], 0)).intValue();
+                            if (!isEditingWindowOpen) {
+                                // Obtenha o ID do pedido na linha selecionada. Supondo que o ID seja a primeira coluna da tabela.
+                                int clienteID = ((BigDecimal)dataTable.getValueAt(selectedRow[0], 0)).intValue();
 
-                            // Abra a janela de edição passando o ID do pedido
-                            new EditarCliente(clienteID).setVisible(true);
+                                // Abra a janela de edição passando o ID do pedido
+                                new EditarCliente(clienteID).setVisible(true);
+                                isEditingWindowOpen = true;
+                            }
                         }
                     });
                     menuItemDelete.addActionListener(new ActionListener() {
@@ -291,8 +299,10 @@ new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\
             panel.add(campoEndereco);
 
             // Inicialize e adicione o botão Resetar Senha
-            ImageIcon borrachaIcon = new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\borracha.png");
-            ImageIcon borrachaRedi = new ImageIcon(borrachaIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+            ImageIcon borrachaIcon =
+                new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\borracha.png");
+            ImageIcon borrachaRedi =
+                new ImageIcon(borrachaIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
 
             botaoResetarSenha = new JButton("Resetar Senha", borrachaRedi);
             botaoResetarSenha.setBackground(new Color(255, 213, 0));
@@ -336,9 +346,10 @@ new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\
             });
 
             // Inicialize e adicione o botão Salvar
-            ImageIcon salvarIcon = new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\salvar2.png");
+            ImageIcon salvarIcon =
+                new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\salvar2.png");
             ImageIcon SalvarRedi = new ImageIcon(salvarIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
-            
+
             botaoSalvar = new JButton("Salvar", SalvarRedi);
             botaoSalvar.setBackground(new Color(0, 204, 51));
             panel.add(botaoSalvar);
