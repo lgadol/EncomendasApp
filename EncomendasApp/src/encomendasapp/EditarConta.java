@@ -219,7 +219,7 @@ public class EditarConta extends JFrame {
             }
         });
 
-        // Adiciona o bot√£o "Salvar" ao JPanel
+        // Adiciona o bot„o "Salvar" ao JPanel
         panel.add(salvarButton);
 
         // Adiciona o JPanel ao JFrame
@@ -242,7 +242,7 @@ public class EditarConta extends JFrame {
                 if (janelaEncomendasAppFinal != null) {
                     janelaEncomendasAppFinal.setEnabled(true);
                 }
-                instance = null; // Adicione esta linha
+                instance = null;
             }
         });
         setEditarContaInMinhaContaNullOnClose();
