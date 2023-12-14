@@ -56,6 +56,8 @@ public class EditarConta extends JFrame {
         this.janelaEncomendasApp = janelaEncomendasApp;
         final JFrame janelaEncomendasAppFinal = janelaEncomendasApp;
         
+        IconSetter.setIcon(this);
+        
         ImageIcon iconeVisto =
             new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\marca-de-verificacao.png");
         ImageIcon iconeX =

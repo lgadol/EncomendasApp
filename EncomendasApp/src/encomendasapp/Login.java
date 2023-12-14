@@ -29,6 +29,8 @@ public class Login extends JFrame {
         loginButton.setBackground(new Color(0, 204, 51));
         loginButton.setForeground(Color.BLACK);
         loginButton.setOpaque(true);
+        
+        IconSetter.setIcon(this);
 
         ImageIcon loginIcon =
             IconManager.resizeIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\entrar.png",

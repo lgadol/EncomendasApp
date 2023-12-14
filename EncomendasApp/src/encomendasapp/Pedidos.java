@@ -30,6 +30,8 @@ public class Pedidos extends JFrame implements AtualizarTabela {
         this.admin = admin;
         this.nomeUsuarioLogado = nomeUsuarioLogado;
         setLayout(new BorderLayout());
+        
+        IconSetter.setIcon(this);
 
         columnNames = new Vector<>();
         columnNames.add("Id");
@@ -259,7 +261,6 @@ new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\
 
     public class EditarPedido extends JFrame {
         private int pedidoId;
-
         private JTextField campoNomeCliente;
         private JComboBox<String> campoCategoria;
         private JTextField campoTipoCarne;
@@ -274,6 +275,9 @@ new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\
 
         public EditarPedido(int pedidoId) {
             this.pedidoId = pedidoId;
+            
+            Image iconeTitulo = Toolkit.getDefaultToolkit().getImage("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\background\\logo.jpg");
+            this.setIconImage(iconeTitulo);
 
             campoNomeCliente = new JTextField();
             campoCategoria = new JComboBox<>(new String[] { "GADO", "PORCO", "FRANGO", "OUTRO" });

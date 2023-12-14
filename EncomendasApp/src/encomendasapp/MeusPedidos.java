@@ -37,6 +37,8 @@ public class MeusPedidos extends JFrame implements AtualizarTabela {
         columnNames.add("Quilos");
         columnNames.add("Preço por Kg");
         columnNames.add("Data da Encomenda");
+        
+        IconSetter.setIcon(this);
 
         // Inicialize dataTable antes de chamar atualizarDadosTabela()
         dataTable = new JTable(new DefaultTableModel());

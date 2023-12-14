@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 
 import java.util.Map;
 
+import java.net.URL;
+
 public class EncomendasApp extends JFrame {
     private JButton clientesButton;
     private JButton pedidosButton;
@@ -31,7 +33,9 @@ public class EncomendasApp extends JFrame {
         this.nomeUsuarioLogado = nomeUsuarioLogado;
         this.idUsuarioLogado = idUsuarioLogado;
         this.usuario = new GerenciadorDeUsuarios().obterUsuarioDoBancoDeDados(idUsuarioLogado);
-
+        
+        IconSetter.setIcon(this);
+        
         nomeUsuarioLabel = new JLabel("<html>" + "Bem-vindo," + "<br>" + nomeUsuarioLogado + "!" + "<html>");
         nomeUsuarioLabel.setFont(new Font("Arial", Font.BOLD, 20));
         nomeUsuarioLabel.setHorizontalAlignment(JLabel.CENTER);

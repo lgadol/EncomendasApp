@@ -44,6 +44,8 @@ public class Clientes extends JFrame implements AtualizarTabela {
         columnNames.add("Estado");
         columnNames.add("Endereco");
 
+        IconSetter.setIcon(this);
+
         // Botão Adicionar Clientes
         addButton = new JButton("Adicionar Cliente");
         ImageIcon addIcon =
@@ -266,6 +268,10 @@ new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\
 
         public EditarCliente(int clienteID) {
             this.clienteID = clienteID;
+
+            Image iconeTitulo =
+                Toolkit.getDefaultToolkit().getImage("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\background\\logo.jpg");
+            this.setIconImage(iconeTitulo);
 
             campoAdmin = new JComboBox<>(new String[] { "SIM", "NÃO" });
             campoAtivo = new JComboBox<>(new String[] { "SIM", "NÃO" });

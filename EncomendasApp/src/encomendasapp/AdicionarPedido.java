@@ -23,6 +23,8 @@ public class AdicionarPedido extends JFrame {
         this.admin = admin;
         this.nomeUsuarioLogado = nomeUsuarioLogado;
         this.pedidosWindow = pedidosWindow;
+        IconSetter.setIcon(this);
+        
         setLayout(new GridLayout(10, 2));
 
         // Inicializando os campos

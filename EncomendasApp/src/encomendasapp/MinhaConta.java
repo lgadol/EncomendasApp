@@ -29,6 +29,8 @@ public class MinhaConta extends JFrame {
 
     public MinhaConta(Map<String, String> usuario, JFrame janelaPrincipal) {
         this.janelaPrincipal = janelaPrincipal;
+        
+        IconSetter.setIcon(this);
 
         ImageIcon iconeVisto =
             new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\marca-de-verificacao.png");

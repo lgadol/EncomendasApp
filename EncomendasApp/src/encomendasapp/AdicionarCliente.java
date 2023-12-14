@@ -38,6 +38,7 @@ public class AdicionarCliente extends JFrame {
         isOpen = true;
 
         this.atualizarTabela = atualizarTabela;
+        IconSetter.setIcon(this);
 
         setLayout(new GridLayout(0, 2));
         adminCheck = new JCheckBox("Admin");

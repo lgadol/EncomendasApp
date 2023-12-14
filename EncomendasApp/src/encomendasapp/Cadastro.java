@@ -21,6 +21,8 @@ public class Cadastro extends JFrame {
         setSize(500, 400);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
+        
+        IconSetter.setIcon(this);
 
         JPanel formPanel = new JPanel(new GridLayout(8, 2));
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
