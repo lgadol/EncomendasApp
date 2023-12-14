@@ -57,7 +57,7 @@ public class Cadastro extends JFrame {
         formPanel.add(cidadeField);
         formPanel.add(new JLabel("Estado:"));
         formPanel.add(estadoBox);
-        formPanel.add(new JLabel("Endereï¿½o:"));
+        formPanel.add(new JLabel("Endereço:"));
         formPanel.add(enderecoField);
         formPanel.add(new JLabel("Senha:"));
         formPanel.add(senhaField);

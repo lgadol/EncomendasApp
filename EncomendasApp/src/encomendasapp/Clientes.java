@@ -9,6 +9,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import java.awt.event.WindowAdapter;
+
+import java.awt.event.WindowEvent;
+
 import java.math.BigDecimal;
 
 import java.sql.*;
@@ -303,6 +307,14 @@ new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\
             panel.add(campoEstado);
             panel.add(new JLabel("Endereço"));
             panel.add(campoEndereco);
+            
+            addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    // Quando a janela de edição é fechada, defina isEditingWindowOpen como false
+                    isEditingWindowOpen = false;
+                }
+            });
 
             // Inicialize e adicione o botão Resetar Senha
             ImageIcon borrachaIcon =
