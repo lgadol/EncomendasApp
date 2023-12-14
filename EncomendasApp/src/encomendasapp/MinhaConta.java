@@ -94,12 +94,16 @@ public class MinhaConta extends JFrame {
         estadoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         enderecoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JButton editarButton = new JButton("Editar");
+        // Adiconar botão editar
+        ImageIcon editarIcon = new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\editar2.png");
+        ImageIcon editarRedi = new ImageIcon(editarIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+        
+        JButton editarButton = new JButton("Editar", editarRedi);
         editarButton.setBackground(new Color(0, 153, 255));
         editarButton.setOpaque(true);
         editarButton.setBorderPainted(false);
         editarButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
+
         final Map<String, String> usuarioFinal = usuario;
         final JFrame janelaEncomendasAppFinal = janelaEncomendasApp;
 

@@ -35,7 +35,12 @@ public class AdicionarPedido extends JFrame {
         tipoPagamentoBox = new JComboBox<>(new String[] { "DINHEIRO", "CREDITO", "DEBITO", "PIX", "OUTRO" });
         precoPagoField = new JTextField();
         kgsField = new JTextField();
-        confirmarButton = new JButton("Confirmar");
+        
+        // Adicionar botão confirmar
+        ImageIcon confirmarIcon = new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\visto.png");
+        ImageIcon confirmarRedi = new ImageIcon(confirmarIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+        
+        confirmarButton = new JButton("Confirmar", confirmarRedi);
         confirmarButton.setBackground(new Color(0, 204, 51));
 
         // Habilita ou desabilita os campos com base no valor de admin

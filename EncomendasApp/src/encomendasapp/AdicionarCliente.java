@@ -47,7 +47,12 @@ public class AdicionarCliente extends JFrame {
         emailField = new JTextField();
         cidadeField = new JTextField();
         enderecoField = new JTextField();
-        salvarButton = new JButton("Confirmar");
+        
+        // Adicionar botão confirmar
+        ImageIcon confirmarIcon = new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\visto.png");
+        ImageIcon confirmarRedi = new ImageIcon(confirmarIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+        
+        salvarButton = new JButton("Confirmar", confirmarRedi);
         salvarButton.setBackground(new Color(0, 204, 51));
 
         add(new JLabel("Admin:"));

@@ -307,7 +307,10 @@ new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\
             panel.add(campoKgs);
 
             // Inicialize e adicione o botão Salvar
-            botaoSalvar = new JButton("Salvar");
+            ImageIcon salvarIcon = new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\salvar2.png");
+            ImageIcon SalvarRedi = new ImageIcon(salvarIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+            
+            botaoSalvar = new JButton("Salvar", SalvarRedi);
             botaoSalvar.setBackground(new Color(0, 204, 51));
             panel.add(botaoSalvar);
 

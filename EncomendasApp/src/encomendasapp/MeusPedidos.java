@@ -51,8 +51,11 @@ public class MeusPedidos extends JFrame implements AtualizarTabela {
         addIcon = new ImageIcon(addImage);
 
         // Botão Limpar Registros
+        ImageIcon limparIcon = new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\deletar-lixeira.png");
+        ImageIcon limparRedi = new ImageIcon(limparIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+        
         if (admin == 1) {
-            clearButton = new JButton("Limpar Registros");
+            clearButton = new JButton("Limpar Registros", limparRedi);
             ImageIcon clearIcon =
                 new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\deletar-lixeira.png");
             Image clearImage = clearIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);

@@ -291,8 +291,11 @@ new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\
             panel.add(campoEndereco);
 
             // Inicialize e adicione o botão Resetar Senha
-            botaoResetarSenha = new JButton("Resetar Senha");
-            botaoResetarSenha.setBackground(new Color(255, 255, 102));
+            ImageIcon borrachaIcon = new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\borracha.png");
+            ImageIcon borrachaRedi = new ImageIcon(borrachaIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+
+            botaoResetarSenha = new JButton("Resetar Senha", borrachaRedi);
+            botaoResetarSenha.setBackground(new Color(255, 213, 0));
             panel.add(botaoResetarSenha);
 
             final int finalClienteID = clienteID;
@@ -333,7 +336,10 @@ new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\
             });
 
             // Inicialize e adicione o botão Salvar
-            botaoSalvar = new JButton("Salvar");
+            ImageIcon salvarIcon = new ImageIcon("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EncomendasApp\\lib\\icons\\salvar2.png");
+            ImageIcon SalvarRedi = new ImageIcon(salvarIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+            
+            botaoSalvar = new JButton("Salvar", SalvarRedi);
             botaoSalvar.setBackground(new Color(0, 204, 51));
             panel.add(botaoSalvar);
 
