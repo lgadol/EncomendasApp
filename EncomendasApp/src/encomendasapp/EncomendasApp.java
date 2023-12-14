@@ -62,7 +62,7 @@ public class EncomendasApp extends JFrame {
         buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
-        Dimension buttonSize = new Dimension(200, 50); // Define o tamanho preferido para os bot√µes
+        Dimension buttonSize = new Dimension(200, 50); // Define o tamanho preferido para os botıes
 
         if (admin == 1) {
             clientesButton = new JButton("Clientes");
